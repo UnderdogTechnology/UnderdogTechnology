@@ -1,0 +1,26 @@
+{
+  "name": "www.underdogtechnology.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start-prod": "NODE_ENV=prod node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UnderdogTechnology/UnderdogTechnology.git"
+  },
+  "author": "David Magee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UnderdogTechnology/UnderdogTechnology/issues"
+  },
+  "homepage": "https://github.com/UnderdogTechnology/UnderdogTechnology#readme",
+  "dependencies": {
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "livereload": "^0.5.0"
+  }
+}
