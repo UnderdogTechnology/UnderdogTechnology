@@ -1,0 +1,169 @@
+/*****************
+**    HEADER    **
+******************/
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.6em;
+    transition: background-color 250ms;
+}
+
+/*****************
+**    CONTENT   **
+******************/
+
+a {
+    text-decoration:none;
+}
+
+body {
+    -webkit-user-select: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+}
+
+.home {
+    position: fixed;
+    overflow-y: auto;
+    top: 51px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: .7em;
+    margin: 0 auto;
+}
+
+/*****************
+**    NAVBAR    **
+******************/
+
+.nav {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    min-height: 400px;
+    left: -300px;
+    font-size: 17px !important;
+    width: 250px;
+    background: #fff;
+    z-index: 9999;
+}
+
+.nav > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    padding: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 250ms;
+}
+
+.nav > ul li a {
+    position: relative;
+    display: block;
+    padding: 10px 0;
+    color: #F0592B;
+    cursor: pointer;
+}
+
+.nav .fa {
+    width: 60px;
+    text-align: center;
+}
+
+.nav .nav-show-children {
+    float: right;
+    padding-top: .25em;
+}
+
+.overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, .65);
+}
+
+/*****************
+**    FOOTER    **
+******************/
+
+/*****************
+**     ALERT    **
+******************/
+
+/*****************
+**    COLORS    **
+******************/
+
+.primary {
+    text-shadow: -1px 0 #515b7d, 0 1px #515b7d, 1px 0 #515b7d, 0 -1px #515b7d !important;
+    background: #41518e !important;
+    border-color: #515b7d !important;
+    color: #fff !important;
+}
+
+.inverse-primary {
+    background: #fff !important;
+    border-color: #fff !important;
+    color: #41518e !important;
+}
+
+.secondary {
+    background: #0BB287 !important;
+    border-color: #148264 !important;
+    color: #fff !important;
+}
+
+.inverse-secondary {
+    background: #fff !important;
+    border-color: #fff !important;
+    color: #0BB287 !important;
+}
+
+.primary.planit {
+    text-shadow: -1px 0 #B54132, 0 1px #B54132, 1px 0 #B54132, 0 -1px #B54132 !important;
+    background: #F0592B !important;
+    border-color: #B54132 !important;
+}
+
+.inverse-primary.planit {
+    background: #fff !important;
+    border-color: #fff !important;
+    color: #F0592B !important;
+}
+
+/*****************
+** WIDTH > 700  **
+******************/
+
+@media screen and (min-width: 700px) {
+    .home {
+        max-width: 700px;
+    }
+}
