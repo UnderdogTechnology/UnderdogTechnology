@@ -1,0 +1,21 @@
+.primary {
+    text-shadow: -1px 0 #B54132, 0 1px #B54132, 1px 0 #B54132, 0 -1px #B54132;
+    background: #F0592B !important;
+    border-color: #B54132 !important;
+    color: #fff !important;
+}
+
+.secondary {
+    background: #0BB287;
+    border-color: #148264;
+    color: #fff;
+}
+
+.pagination {
+    color:#F0592B !important;
+}
+
+.pagination .page-selected {
+    color: #0BB287 !important;
+    text-decoration: underline !important;
+}
