@@ -5,7 +5,6 @@ system.cmp.nav = {
         var ctrl = {
             active: {
                 item: args.activeItem,
-                child: args.activeItem.children,
                 parent: args.activeItem
             },
             visible: args.visible || m.prop(false),
@@ -57,11 +56,17 @@ system.cmp.nav = {
                 evt.preventDefault();
                 
                 ctrl.active.parent = item;
-                ctrl.active.children = item.children;
                 
                 Velocity(util.q('.nav-two'), {
                     left: 0
                 }, speed);
+                
+                util.shadeElem({
+                    update: '.nav-heading',
+                    from: '.inverse-' + item.class.replace(' ', '.'),
+                    attr: 'color',
+                    percent: .1
+                })
             },
             hideChildren: function() {
                 Velocity(util.q('.nav-two'), {
@@ -129,7 +134,7 @@ system.cmp.nav = {
                     m('span', ctrl.active.parent.name)
                 ]),
                 m('ul', [
-                    (ctrl.active.children || []).map(function(child, index) {
+                    (ctrl.active.parent.children || []).map(function(child, index) {
                         return m('li', {
                                 role: 'presentation',
                             },

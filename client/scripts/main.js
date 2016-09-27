@@ -2,14 +2,16 @@
 (function() {
     var system = window.system = window.system || {};
 
-    var cmp = system.cmp = {};
+    var cmp = system.cmp = {
+        planit: {}
+    };
     var model = system.model = {};
     
     var deps = {
         // MODELS
         'models/': [],
         // COMPONENTS
-        'components/': ['nav', 'home']
+        'components/': ['nav', 'home', 'planit/find']
     };
     
     var layout = function(item, nav) {
@@ -52,7 +54,7 @@
                     url: '/plan-it',
                     icon: 'fa fa-search fa-lg',
                     class: 'primary planit',
-                    component: cmp.home
+                    component: cmp.planit.find
                 }
             ]
         }]);
