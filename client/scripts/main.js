@@ -12,23 +12,23 @@
         'components/': ['nav', 'home']
     };
     
-    var layout = function(title, nav, content, activeClass) {
+    var layout = function(item, nav) {
         return {
             controller: function(args) {
                 m.redraw.strategy('diff');
-                document.title = title;
+                document.title = item.name;
             },
             view: function(ctrl, args) {
                 return m('div.underdog-technology', [
                     m('h1.header', {
-                        class: activeClass 
-                    }, title),
+                        class: item.class
+                    }, item.name),
                     m.component(cmp.nav, {
-                        activeClass: activeClass,
-                        active: title,
+                        activeItem: item,
+                        headerClass: item.class,
                         items: nav
                     }),
-                    m('div.content', m.component(content, args[0]))
+                    m('div.content', m.component(item.component, {}))
                 ]);
             }
         };
@@ -40,23 +40,21 @@
             name: 'Home',
             url: '/',
             icon: 'fa fa-home fa-lg',
-            activeClass: 'primary',
+            class: 'primary',
             component: cmp.home
         }, {
             name: 'Plan.it',
-            url: '/plan-it',
             icon: 'fa fa-rocket fa-lg',
-            activeClass: 'primary planit',
+            class: 'primary planit',
             children: [
                 {
                     name: 'Find',
-                    url: '/plan-it/find',
+                    url: '/plan-it',
                     icon: 'fa fa-search fa-lg',
-                    activeClass: 'primary planit',
+                    class: 'primary planit',
                     component: cmp.home
                 }
-            ],
-            component: cmp.home
+            ]
         }]);
     }
     ;
@@ -67,10 +65,14 @@
         // apply the layout to each component in the nav and create the core route object
         var routes = {};
         navItems().forEach(function(item) {
-            item.component = layout(item.name, navItems, item.component, item.activeClass);
-            routes[item.url] = item.component;
-        }
-        );
+            if(item.children) {
+                item.children.forEach(function(child){
+                   routes[child.url] = layout(child, navItems);
+                });
+            } else {
+                routes[item.url] = layout(item, navItems);
+            }
+        });
         // add any extra non-core routes
         util.extend(routes, {});
         // use hash for routing, NOTE: we'll probably change this to slash later once it's hosted
