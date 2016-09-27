@@ -41,6 +41,26 @@ var util = {
             }
         }
         return string;
+    },
+    shadeElem: function(args) {
+        if(args) {
+            var update = null,
+                from = null;
+            if(args.update && (update = util.q(args.update))) {
+                if(!args.attr) return false;
+                
+                if(args.from) from = util.q(args.from);
+                
+                var color = args.color || window.getComputedStyle(from || update)[args.attr];
+                
+                if(!color) return false;
+                
+                update.style.background = color.replace('rgb','rgba').replace(')', ',' + (args.percent || .1) + ')');
+                
+                return true;
+            }
+        }
+        return false;
     }
 };
 
