@@ -3,7 +3,11 @@ system.cmp.nav = {
         var speed = 250;
         
         var ctrl = {
-            activeChildren: [],
+            active: {
+                item: args.activeItem,
+                child: args.activeItem.children,
+                parent: args.activeItem
+            },
             visible: args.visible || m.prop(false),
             show: function() {
                 Velocity(util.q('.overlay'), "fadeIn", speed);
@@ -17,7 +21,7 @@ system.cmp.nav = {
             hide: function() {
                 Velocity(util.q('.overlay'), "fadeOut", speed);
                 
-                Velocity(util.q('.nav-one'), {
+                Velocity(util.qq('.nav'), {
                     left: -300
                 }, speed);
                 
@@ -30,19 +34,57 @@ system.cmp.nav = {
                     ctrl.show();
                 }
             },
-            changeRoute: function(elem, isInit, ctx) {
-                if (!isInit) {
-                    elem.onclick = function(evt) {
-                        // TODO: not the cleanest solution, look into using css transitionend event
-                        evt.preventDefault();
-                        
-                        ctrl.hide();
-                        
-                        setTimeout(function() {
-                            m.route(elem.getAttribute('href'));
-                        }, 300);
-                    };
+            changeRoute: function(item, evt) {
+                // TODO: not the cleanest solution, look into using css transitionend event
+                evt.preventDefault();
+                
+                ctrl.active.item = item;
+                
+                ctrl.hide();
+                
+                Velocity(util.q('.header'), {
+                    fontSize: '0px'
+                }, speed).then(function(el) {
+                    
+                    Velocity(el[0], {
+                        fontSize: '1.6em'
+                    }, speed);
+                
+                    m.route(item.url);
+                });
+            },
+            showChildren: function(item, evt) {
+                evt.preventDefault();
+                
+                ctrl.active.parent = item;
+                ctrl.active.children = item.children;
+                
+                Velocity(util.q('.nav-two'), {
+                    left: 0
+                }, speed);
+            },
+            hideChildren: function() {
+                Velocity(util.q('.nav-two'), {
+                    left: -300
+                }, speed);
+            },
+            isActive: function(item, active) {
+                
+                if(item.name == active) {
+                    return true;
                 }
+                
+                var cFound = [];
+                
+                if(item.children) {
+                    cFound = item.children.map(function(e, i){
+                        if(e.name == active){
+                            return true;
+                        }
+                    });
+                }
+                
+                return cFound.indexOf(true) > -1;
             }
         };
         return ctrl;
@@ -55,19 +97,19 @@ system.cmp.nav = {
                 onclick: ctrl.hide
             }),
             m('span.nav-btn.fa.fa-bars', {
-                class: args.activeClass,
+                class: args.headerClass,
                 onclick: ctrl.toggle
             }),
             m('div.nav.nav-one', [
                 m('ul', [
                     items.map(function(item, index) {
                         return m('li', {
-                                role: 'presentation',
+                                role: 'presentation'
                             },
                             m('a', {
-                                class: (item.name == args.active ? '' : 'inverse-') + item.activeClass,
+                                class: (ctrl.isActive(item, ctrl.active.item.name) ? '' : 'inverse-') + item.class,
                                 href: item.url,
-                                config: ctrl.changeRoute
+                                onclick: (item.children ? ctrl.showChildren.bind(this, item) : ctrl.changeRoute.bind(this, item))
                             }, [
                                 m('i.nav-icon', {
                                     class: item.icon
@@ -79,21 +121,27 @@ system.cmp.nav = {
                     })
                 ])
             ]), m('div.nav.nav-two', [
-                m('span', args.active),
+                m('div.nav-heading', {
+                    class: 'inverse-' + ctrl.active.parent.class,
+                    onclick: ctrl.hideChildren
+                }, [
+                    m('i.fa.fa-chevron-left'),
+                    m('span', ctrl.active.parent.name)
+                ]),
                 m('ul', [
-                    ctrl.activeChildren.map(function(item, index) {
+                    (ctrl.active.children || []).map(function(child, index) {
                         return m('li', {
                                 role: 'presentation',
                             },
                             m('a', {
-                                class: (item.name == args.active ? '' : 'inverse-') + item.activeClass,
-                                href: item.url,
-                                config: ctrl.changeRoute
+                                class: (ctrl.isActive(child, ctrl.active.item.name) ? '' : 'inverse-') + child.class,
+                                href: child.url,
+                                onclick: ctrl.changeRoute.bind(this, child)
                             }, [
                                 m('i.nav-icon', {
-                                    class: item.icon
+                                    class: child.icon
                                 }),
-                                m('span.itemName', item.name)
+                                m('span.itemName', child.name)
                             ])
                         );
                     })

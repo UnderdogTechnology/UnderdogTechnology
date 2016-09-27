@@ -48,7 +48,13 @@ body {
 **    NAVBAR    **
 ******************/
 
+.nav-heading {
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+}
+
 .nav {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
     overflow-x: hidden;
     overflow-y: auto;
     position: absolute;
