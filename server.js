@@ -23,4 +23,4 @@ app.get('/*', function(req, res) {
   res.render(clientDir + '/index', { dev: devMode });
 });
 
-app.listen(80);
+app.listen(80, '0.0.0.0');

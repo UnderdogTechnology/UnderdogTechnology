@@ -1,7 +1,6 @@
 system.cmp.nav = {
     controller: function(args) {
-        var speed = 250;
-        
+        var speed = 275;
         var ctrl = {
             active: {
                 item: args.activeItem,
@@ -36,20 +35,9 @@ system.cmp.nav = {
             changeRoute: function(item, evt) {
                 evt.preventDefault();
                 
-                ctrl.active.item = item;
-                
                 ctrl.hide();
                 
-                Velocity(util.q('.header'), {
-                    fontSize: '0px'
-                }, speed).then(function(el) {
-                    
-                    Velocity(el[0], {
-                        fontSize: '1.6em'
-                    }, speed);
-                
-                    m.route(item.url);
-                });
+                vutil.changeRoute(item.url, item.name);
             },
             showChildren: function(item, evt) {
                 evt.preventDefault();
@@ -99,8 +87,11 @@ system.cmp.nav = {
             m('div.overlay', {
                 onclick: ctrl.hide
             }),
+            m('h1.header', {
+                class: ctrl.active.item.class
+            }, m('span', ctrl.active.item.name)),
             m('span.nav-btn.fa.fa-bars', {
-                class: args.headerClass,
+                class: ctrl.active.item.class,
                 onclick: ctrl.toggle
             }),
             m('div.nav.nav-one', [

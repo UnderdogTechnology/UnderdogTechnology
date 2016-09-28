@@ -2,6 +2,7 @@
 /**
  ** Generic Utilities
  **/
+ 
 var util = {
     q: function(q, c) {
         return (c || document).querySelector(q);
@@ -61,9 +62,52 @@ var util = {
             }
         }
         return false;
+    },
+    findNavItem: function(route, navItems) {
+        var found;
+        (navItems || system.globalNavItems).some(function(item) {
+            if(item.url === route) {
+                found = item;
+            } else if(item.children) {
+                found = util.findNavItem(route, item.children);
+            }
+            if(found) return true;
+        });
+        return found;
     }
 };
 
+/**
+ ** Velocity Specific Utilities
+ **/
+ 
+ var speed = 275;
+ 
+ var vutil = {
+    changeRoute: function(href) { 
+        var navItem = util.findNavItem(href),
+            header = util.q('.header span');
+        
+        var headerSize = window.getComputedStyle(header)['font-size'];
+        Velocity(util.q('.content'), 'fadeOut', speed)
+        Velocity(util.q('.loading'), 'fadeIn', speed)
+        util.q('.header').className = 'header ' + navItem.class;
+        util.q('.nav-btn.fa.fa-bars').className = 'nav-btn fa fa-bars ' + navItem.class;
+        Velocity(header, {
+                fontSize: 0
+            }, speed).then(function(el) {
+                
+            el[0].textContent = navItem.name;
+            Velocity(el[0], {
+                fontSize: headerSize
+            }, speed).then(function() {
+                m.route(href);
+            });
+        })
+    }    
+ }
+ ;
+ 
 /**
  ** Mithril Specific Utilities
  **/
