@@ -124,6 +124,10 @@ body {
 **    TOGGLE    **
 ******************/
 
+.tgl-container .tgl-label {
+    margin-right: 1.6em;
+}
+
 .tgl {
     border-radius: 2px;
     position: relative;
@@ -136,18 +140,14 @@ body {
     vertical-align: middle;
 }
 
-.tgl label {
-    margin: 0 !important;
-}
-
 .tgl .tgl-btn {
     font-weight: normal;
     position: absolute;
     left: -3px;
-    display: inline-block !important;
+    display: inline-block;
     overflow: hidden;
     color: #fff;
-    width: 150px !important;
+    width: 150px;
     -webkit-transition: left 400ms, left 400ms, -webkit-transform 400ms;
     transition: left 400ms, left 400ms, transform 400ms;
 }

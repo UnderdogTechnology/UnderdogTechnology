@@ -19,6 +19,7 @@ if (devMode) {
 app.use(express.static(clientDir));
 
 app.get('/*', function(req, res) {
+  console.log('got request');
   res.render(clientDir + '/index', { dev: devMode });
 });
 
