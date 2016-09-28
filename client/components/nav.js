@@ -34,7 +34,6 @@ system.cmp.nav = {
                 }
             },
             changeRoute: function(item, evt) {
-                // TODO: not the cleanest solution, look into using css transitionend event
                 evt.preventDefault();
                 
                 ctrl.active.item = item;
@@ -95,7 +94,6 @@ system.cmp.nav = {
         return ctrl;
     },
     view: function(ctrl, args) {
-        var items = args.items();
         
         return m('div.nav-container', [
             m('div.overlay', {
@@ -107,7 +105,7 @@ system.cmp.nav = {
             }),
             m('div.nav.nav-one', [
                 m('ul', [
-                    items.map(function(item, index) {
+                    args.items.map(function(item, index) {
                         return m('li', {
                                 role: 'presentation'
                             },

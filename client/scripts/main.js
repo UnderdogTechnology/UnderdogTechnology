@@ -1,17 +1,23 @@
 /* global util,m */
 (function() {
     var system = window.system = window.system || {};
-
+    
+    var db = system.db = {
+        local: new PouchDB('localdb'),
+        remote: new PouchDB('http://' + (location.host || 'localhost').split(':')[0] + ':5984/remotedb')
+    };
+    
     var cmp = system.cmp = {
         planit: {}
     };
+    
     var model = system.model = {};
     
     var deps = {
         // MODELS
-        'models/': [],
+        '/models/': [],
         // COMPONENTS
-        'components/': ['nav', 'home', 'planit/find']
+        '/components/': ['nav', 'home', 'planit/find', 'settings']
     };
     
     var layout = function(item, nav) {
@@ -38,7 +44,7 @@
     ;
     
     var loadNavItems = function() {
-        return m.prop([{
+        return [{
             name: 'Home',
             url: '/',
             icon: 'fa fa-home fa-lg',
@@ -51,13 +57,19 @@
             children: [
                 {
                     name: 'Find',
-                    url: '/plan-it',
+                    url: '/plan-it/find',
                     icon: 'fa fa-search fa-lg',
                     class: 'primary planit',
                     component: cmp.planit.find
                 }
             ]
-        }]);
+        }, {
+            name: 'Settings',
+            url: '/settings',
+            icon: 'fa fa-wrench fa-lg',
+            class: 'primary',
+            component: cmp.settings
+        }];
     }
     ;
     
@@ -66,7 +78,7 @@
         var navItems = loadNavItems();
         // apply the layout to each component in the nav and create the core route object
         var routes = {};
-        navItems().forEach(function(item) {
+        navItems.forEach(function(item) {
             if(item.children) {
                 item.children.forEach(function(child){
                    routes[child.url] = layout(child, navItems);

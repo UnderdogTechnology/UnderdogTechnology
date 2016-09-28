@@ -8,27 +8,29 @@
     <!-- META -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS Vendor -->
-    <link rel="stylesheet" type="text/css" href="css/vendor/font-awesome.min.css">
-    <link rel="stylesheet" href="css/vendor/pure-min.css">
-    <link rel="stylesheet" href="css/vendor/grids-responsive-min.css">
+    <link rel="stylesheet" type="text/css" href="/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/vendor/pure-min.css">
+    <link rel="stylesheet" href="/css/vendor/grids-responsive-min.css">
     <!-- CSS Custom -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-</head>
-
-<body>
-    <!-- JS Vendor -->
-    <script type="text/javascript" src="scripts/vendor/mithril.min.js"></script>
-    <script type="text/javascript" src="scripts/vendor/velocity.min.js"></script>
-    <!-- JS Custom -->
-    <script type="text/javascript" src="scripts/module-loader.js"></script>
-    <script type="text/javascript" src="scripts/util.js"></script>
-    <script type="text/javascript" src="scripts/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <% if(dev) { %>
         <script>
             document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
             ':35729/livereload.js?snipver=1"></' + 'script>')
         </script>
     <% } %>
+</head>
+
+<body>
+    <!-- JS Vendor -->
+    <script type="text/javascript" src="/scripts/vendor/pouchdb-6.0.5.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/pouchdb.authentication.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/mithril.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/velocity.min.js"></script>
+    <!-- JS Custom -->
+    <script type="text/javascript" src="/scripts/module-loader.js"></script>
+    <script type="text/javascript" src="/scripts/util.js"></script>
+    <script type="text/javascript" src="/scripts/main.js"></script>
 </body>
 
 </html>

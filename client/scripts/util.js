@@ -90,8 +90,8 @@ var mutil = {
         return m('i.fa.fa-' + name, children);
     },
     createSwitch: function(options, checked, label, cb, attr) {
-        return [
-            m('label', label),
+        return m('div.tgl-container', [
+            m('label.tgl-label', label),
             m('div.tgl', attr, [
                 m('label.tgl-btn', {
                         class: checked ? 'tgl-on' : 'tgl-off'
@@ -104,7 +104,7 @@ var mutil = {
                         onchange: cb
                     }))
             ])
-        ];
+        ]);
     }
 };
 
