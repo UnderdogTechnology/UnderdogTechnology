@@ -252,7 +252,21 @@ div.form-control > table {
 }
 
 .alert.success {
-    background: #dff0d8;
+    background: #0BB287;
+}
+
+.form-control.error,
+.form-control.error:focus{
+    outline:0;
+    border-color: #ce6f6f !important;
+    color:#000 !important;
+}
+
+.form-control.success,
+.form-control.success:focus{
+    outline:0;
+    border-color: #257d65 !important;
+    color:#000 !important;
 }
 
 /*****************

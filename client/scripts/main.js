@@ -25,11 +25,14 @@
     
     var model = system.model = {};
     
+    system.shared = {
+    };
+    
     var deps = {
         // MODELS
         '/models/': [],
         // COMPONENTS
-        '/components/': ['nav', 'home', 'alert', 'planit/find', 'settings', 'signup', 'signin']
+        '/components/': ['nav', 'home', 'alert-wrapper', 'alert', 'planit/find', 'settings', 'signup', 'signin']
     };
     
     var layout = function(item) {
@@ -37,7 +40,10 @@
             controller: function(args) {
                 document.title = item.name;
                 
-                var ctrl = {};
+                var ctrl = {
+                    alert: m.prop({}),
+                    alerts: m.prop([])
+                };
                 
                 return ctrl;
             },
@@ -50,16 +56,12 @@
                     m('div.content', m.component(item.component, args[0])),
                     m('div.loading',
                         m('img', {
-                            src: './images/loading.gif'
+                            src: '/images/loading.gif'
                         })
-                    ),
+                    ), m.component(cmp.alertWrapper, {})/*
                     m.component(cmp.alert, {
-                        alert: m.prop({
-                            type: 'error',
-                            message: 'Something is Ron',
-                            cb: null
-                        })
-                    })
+                        alert: ctrl.alert
+                    })*/
                 ]);
             }
         };
@@ -81,7 +83,6 @@
             }
         };
     }
-    user = true;
     
     var loadNavItems = function() {
         
