@@ -8,7 +8,7 @@ system.cmp.nav = {
             },
             visible: args.visible || m.prop(false),
             show: function() {
-                Velocity(util.q('.overlay'), "fadeIn", speed);
+                Velocity(util.q('.nav-container .overlay'), 'fadeIn', speed);
                 
                 Velocity(util.q('.nav-one'), {
                     left: 0
@@ -17,7 +17,7 @@ system.cmp.nav = {
                 ctrl.visible(true);
             },
             hide: function() {
-                Velocity(util.q('.overlay'), "fadeOut", speed);
+                Velocity(util.q('.nav-container .overlay'), 'fadeOut', speed);
                 
                 Velocity(util.qq('.nav'), {
                     left: -300

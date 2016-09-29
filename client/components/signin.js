@@ -6,6 +6,10 @@ system.cmp.signIn = {
                 password: m.prop('')
             },
             signIn: function() {
+                args.alert({
+                    type: 'error',
+                    message: 'Something is Ron'
+                })
             }
         };
         return ctrl;

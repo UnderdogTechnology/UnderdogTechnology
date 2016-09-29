@@ -74,6 +74,58 @@ var util = {
             if(found) return true;
         });
         return found;
+    },
+    isValid: function(type, value, err) {
+        if(value) {
+            var regex = null,
+                message = '',
+                valueTwo = null;
+            
+            switch(type) {
+                case 'email':
+                    regex = /[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{1,3}/;
+                    message = 'Email must be supplied in the correct format.';
+                    break;
+                case 'password':
+                    regex = /[A-Za-z0-9]{8}/;
+                    if (Array.isArray(value)) {
+                        valueTwo = value[1];
+                        value = value[0]
+                    }
+                    message = 'Password must be supplied in the correct format.';
+                    break;
+                case 'username':
+                    regex = /[A-Za-z0-9]{5,15}/;
+                    message = 'Username must be alphanumeric and between 5 and 15 characters.';
+                    break;
+                default:
+                    return false;
+            }
+            
+            if(regex.test(value)) return { isValid: true };
+            
+            if(valueTwo && regex.test(valueTwo) && regex.test(valueTwo)) message = "Passwords must match";
+            
+        } else {
+            switch(type) {
+                case 'email':
+                    message = 'Email is a required field.';
+                    break;
+                case 'password':
+                    message = 'Password is a required field.';
+                    break;
+                case 'username':
+                    message = 'Username is a required field.';
+                    break;
+                default:
+                    return false;
+            }
+        }
+        
+        return {
+            isValid: false,
+            message: message
+        };
     }
 };
 
@@ -87,8 +139,7 @@ var util = {
     changeRoute: function(href) { 
         var navItem = util.findNavItem(href),
             header = util.q('.header span');
-        
-        var headerSize = window.getComputedStyle(header)['font-size'];
+            
         Velocity(util.q('.content'), 'fadeOut', speed)
         Velocity(util.q('.loading'), 'fadeIn', speed)
         util.q('.header').className = 'header ' + navItem.class;
@@ -98,9 +149,7 @@ var util = {
             }, speed).then(function(el) {
                 
             el[0].textContent = navItem.name;
-            Velocity(el[0], {
-                fontSize: headerSize
-            }, speed).then(function() {
+            Velocity(el[0], 'reverse', speed).then(function() {
                 m.route(href);
             });
         })
@@ -132,6 +181,18 @@ var mutil = {
     },
     icon: function(name, children) {
         return m('i.fa.fa-' + name, children);
+    },
+    withValidate: function(attr, type, prop, err) {
+        return function(evt) {
+            var value = evt.target.value;
+            prop(value);
+            var status = util.isValid(type, value);
+            if(status && !status.isValid) {
+                err({ type: 'error', message: status.message });
+            } else {
+                err({});
+            }
+        };
     },
     createSwitch: function(options, checked, label, cb, attr) {
         return m('div.tgl-container', [
