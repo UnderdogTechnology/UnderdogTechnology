@@ -2,17 +2,18 @@ system.cmp.signUp = {
     controller: function(args) {
         var count = 0;
         var ctrl = {
-            form: {
-                username: m.prop(null),
-                email: m.prop(null),
-                password: m.prop(null),
-                cPassword: m.prop(null)
-            },
+            username: m.prop(null),
+            email: m.prop(null),
+            password: m.prop(null),
+            cPassword: m.prop(null),
             signUp: function() {
-                system.shared.alertWrapper.add({
-                    message:'Pie is pretty good' + count++,
-                    type: 'success'
-                })
+                var user = new system.model.user({
+                    username: ctrl.username() || '',
+                    password: [ctrl.password() || '', ctrl.cPassword() || ''],
+                    email: ctrl.email() || ''
+                });
+                
+                user.signUp();
             },
             isValid: function(type, value) {
                 if(value === null || value[0] === null) return '';
@@ -29,36 +30,36 @@ system.cmp.signUp = {
                     m('label', 'Username'),
                     m('input[type="text"].form-control', {
                         placeholder: 'Username',
-                        value: ctrl.form.username(),
-                        onblur: mutil.withValidate('value', 'username', ctrl.form.username, args.alert),
-                        class: ctrl.isValid('username', ctrl.form.username())
+                        value: ctrl.username(),
+                        onblur: mutil.withValidate('value', 'username', ctrl.username),
+                        class: ctrl.isValid('username', ctrl.username())
                     })
                 ]),
                 mutil.formGroup([
                     m('label', 'Email'),
                     m('input[type="text"].form-control', {
                         placeholder: 'Email',
-                        value: ctrl.form.email(),
-                        onblur: mutil.withValidate('value', 'email', ctrl.form.email, args.alert),
-                        class: ctrl.isValid('email', ctrl.form.email())
+                        value: ctrl.email(),
+                        onblur: mutil.withValidate('value', 'email', ctrl.email),
+                        class: ctrl.isValid('email', ctrl.email())
                     })
                 ]),
                 mutil.formGroup([
                     m('label', 'Password'),
                     m('input[type="password"].form-control', {
                         placeholder: 'Password',
-                        value: ctrl.form.password(),
-                        onblur: mutil.withValidate('value', 'password', ctrl.form.password, args.alert),
-                        class: ctrl.isValid('password', [ctrl.form.password(), ctrl.form.cPassword()])
+                        value: ctrl.password(),
+                        onblur: mutil.withValidate('value', 'password', ctrl.password),
+                        class: ctrl.isValid('password', [ctrl.password(), ctrl.cPassword()])
                     })
                 ]),
                 mutil.formGroup([
                     m('label', 'Confirm Password'),
                     m('input[type="password"].form-control', {
                         placeholder: 'Confirm Password',
-                        value: ctrl.form.cPassword(),
-                        onblur: mutil.withValidate('value', 'password', ctrl.form.cPassword, args.alert),
-                        class: ctrl.isValid('password', [ctrl.form.cPassword(), ctrl.form.password()])
+                        value: ctrl.cPassword(),
+                        onblur: mutil.withValidate('value', 'password', ctrl.cPassword),
+                        class: ctrl.isValid('password', [ctrl.cPassword(), ctrl.password()])
                     })
                 ]),,
                 mutil.formControls([

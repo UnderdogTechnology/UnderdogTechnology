@@ -75,7 +75,7 @@ var util = {
         });
         return found;
     },
-    isValid: function(type, value, err) {
+    isValid: function(type, value) {
         if(value) {
             var regex = null,
                 message = '',
@@ -182,15 +182,14 @@ var mutil = {
     icon: function(name, children) {
         return m('i.fa.fa-' + name, children);
     },
-    withValidate: function(attr, type, prop, err) {
+    withValidate: function(attr, type, prop, submit) {
         return function(evt) {
             var value = evt.target.value;
+            if(!value && !submit) return;
             prop(value);
             var status = util.isValid(type, value);
             if(status && !status.isValid) {
-                err({ type: 'error', message: status.message });
-            } else {
-                err({});
+                system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa fa-lg fa-pencil' });
             }
         };
     },

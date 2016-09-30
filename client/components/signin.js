@@ -1,15 +1,20 @@
 system.cmp.signIn = {
     controller: function(args) {
         var ctrl = {
-            form: {
-                username: m.prop(''),
-                password: m.prop('')
+            username: m.prop(null),
+            password: m.prop(null),
+            isValid: function(type,value) {
+                if(value === null || value[0] === null) return '';
+                var status = util.isValid(type, value);
+                return status && status.isValid ? 'success' : 'error';
             },
             signIn: function() {
-                args.alert({
-                    type: 'error',
-                    message: 'Something is Ron'
-                })
+                var user = new system.model.user({
+                    username: ctrl.username() || '',
+                    password: ctrl.password() || ''
+                });
+                
+                user.signIn();
             }
         };
         return ctrl;
@@ -21,16 +26,18 @@ system.cmp.signIn = {
                     m('label', 'Username'),
                     m('input[type="text"].form-control', {
                         placeholder: 'Username',
-                        value: ctrl.form.username(),
-                        onchange: m.withAttr('value', ctrl.form.username)
+                        value: ctrl.username(),
+                        onblur: mutil.withValidate('value', 'username', ctrl.username),
+                        class: ctrl.isValid('username', ctrl.username())
                     })
                 ]),
                 mutil.formGroup([
                     m('label', 'Password'),
                     m('input[type="password"].form-control', {
                         placeholder: 'Password',
-                        value: ctrl.form.password(),
-                        onchange: m.withAttr('value', ctrl.form.password)
+                        value: ctrl.password(),
+                        onblur: mutil.withValidate('value', 'password', ctrl.password),
+                        class: ctrl.isValid('value', ctrl.password())
                     })
                 ]),
                 mutil.formControls([

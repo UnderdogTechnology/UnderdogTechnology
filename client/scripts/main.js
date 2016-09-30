@@ -9,16 +9,6 @@
     
     db.local.sync(db.remote, {live: true, retry: true}).on('error', console.log.bind(console));
     
-    var user = null;
-    
-    db.remote.getSession().then(function(r) {
-        user = r.userCtx.name;
-    }).catch(function(e) {
-        if(e) {
-            // network error
-        }
-    })
-    
     var cmp = system.cmp = {
         planit: {}
     };
@@ -28,11 +18,21 @@
     system.shared = {
     };
     
+    var user = system.shared.user = system.shared.user || null;
+    
+    db.remote.getSession().then(function(r) {
+        user = r.userCtx.name;
+    }).catch(function(e) {
+        if(e) {
+            // network error
+        }
+    })
+    
     var deps = {
         // MODELS
-        '/models/': [],
+        '/models/': ['user'],
         // COMPONENTS
-        '/components/': ['nav', 'home', 'alert-wrapper', 'alert', 'planit/find', 'settings', 'signup', 'signin']
+        '/components/': ['nav', 'home', 'alert', 'planit/find', 'settings', 'signup', 'signin']
     };
     
     var layout = function(item) {
@@ -58,10 +58,7 @@
                         m('img', {
                             src: '/images/loading.gif'
                         })
-                    ), m.component(cmp.alertWrapper, {})/*
-                    m.component(cmp.alert, {
-                        alert: ctrl.alert
-                    })*/
+                    ), m.component(cmp.alert, {})
                 ]);
             }
         };

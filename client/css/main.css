@@ -231,16 +231,38 @@ div.form-control > table {
 ******************/
 
 .alert {
+    text-align:center;
+    cursor: pointer;
+    z-index:999;
     position: fixed;
-    bottom: -50px;
+    top: -55px;
     left: 0;
     right: 0;
     height: 50px;
-    line-height: 50px;
-    text-align: center;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.26);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
     margin: 0;
-    color: #333;
+    color: #666;
+    transition: all 200ms ease 0s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.alert-text {
+    margin-top: 5px;
+    width:80%;
+}
+
+.alert-icon {
+    float: left;
+    margin: .85em;
+}
+
+.alert-visible {
+    top: 0px;
+}
+
+.alert-hidden {
+    top: -55px;
 }
 
 .alert.error {
