@@ -58,14 +58,7 @@
                         m('img', {
                             src: '/images/loading.gif'
                         })
-<<<<<<< HEAD
                     ), m.component(cmp.alert, {})
-=======
-                    ), m.component(cmp.alertWrapper, {})/*
-                    m.component(cmp.alert, {
-                        alert: ctrl.alert
-                    })*/
->>>>>>> 1b44e82f6c365184541f9a6be46378bfb6bb6d2d
                 ]);
             }
         };
