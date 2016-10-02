@@ -16,23 +16,14 @@
     var model = system.model = {};
     
     system.shared = {
+        user: null
     };
-    
-    var user = system.shared.user = system.shared.user || null;
-    
-    db.remote.getSession().then(function(r) {
-        user = r.userCtx.name;
-    }).catch(function(e) {
-        if(e) {
-            // network error
-        }
-    })
     
     var deps = {
         // MODELS
         '/models/': ['user'],
         // COMPONENTS
-        '/components/': ['nav', 'home', 'alert', 'planit/find', 'settings', 'signup', 'signin']
+        '/components/': ['nav', 'home', 'alert', 'detail-box', 'switch', 'planit/find', 'settings', 'sign-up', 'sign-in']
     };
     
     var layout = function(item) {
@@ -40,10 +31,7 @@
             controller: function(args) {
                 document.title = item.name;
                 
-                var ctrl = {
-                    alert: m.prop({}),
-                    alerts: m.prop([])
-                };
+                var ctrl = {};
                 
                 return ctrl;
             },
@@ -62,76 +50,69 @@
                 ]);
             }
         };
-    }
-    ;
-    
-    var loadNavItems2 = function() {
-        return {
-            '/': {
-                title: 'Home',
-                icon: 'fa fa-home fa-lg',
-                class: 'primary',
-                component: user ? cmp.home : cmp.signUp
-            }, '/settings': {
-                title: 'Settings',
-                icon: 'fa fa-wrench fa-lg',
-                class: 'primary',
-                component: cmp.settings
-            }
-        };
-    }
+    };
     
     var loadNavItems = function() {
-        
-        var rNavs = [{
+        var rNavs = [
+        // PUBLIC ROUTES
+        {
             name: 'Home',
             url: '/',
             icon: 'fa fa-home fa-lg',
             class: 'primary',
-            component: user ? cmp.home : cmp.signUp
+            component: cmp.home
+        }, {
+            name: 'Sign Up',
+            url: '/sign-up',
+            icon: 'fa fa-user-plus fa-lg',
+            class: 'primary',
+            auth: false,
+            component: cmp.signUp
+        }, {
+            name: 'Sign In',
+            url: '/sign-in',
+            icon: 'fa fa-sign-in fa-lg',
+            class: 'primary',
+            auth: false,
+            component: cmp.signIn
+        // AUTHENTICATED ROUTES
+        }, {
+            name: 'Plan.it',
+            icon: 'fa fa-rocket fa-lg',
+            class: 'primary planit',
+            auth: true,
+            children: [
+                {
+                    name: 'Find',
+                    url: '/plan-it/find',
+                    icon: 'fa fa-search fa-lg',
+                    class: 'primary planit',
+                    component: cmp.planit.find
+                }
+            ]
+        }, {
+            name: 'Settings',
+            url: '/settings',
+            icon: 'fa fa-wrench fa-lg',
+            class: 'primary',
+            auth: true,
+            component: cmp.settings
+        }, {
+            name: 'Sign Out',
+            icon: 'fa fa-sign-out fa-lg',
+            auth: true,
+            class: 'primary',
+            onclick: function(e) {
+                system.model.user.signOut();
+                vutil.changeRoute('/sign-in');
+            }
         }];
-        
-        if(user) {
-            rNavs = util.extend(rNavs, [{
-                name: 'Plan.it',
-                icon: 'fa fa-rocket fa-lg',
-                class: 'primary planit',
-                children: [
-                    {
-                        name: 'Find',
-                        url: '/plan-it/find',
-                        icon: 'fa fa-search fa-lg',
-                        class: 'primary planit',
-                        component: cmp.planit.find
-                    }
-                ]
-            }, {
-                name: 'Settings',
-                url: '/settings',
-                icon: 'fa fa-wrench fa-lg',
-                class: 'primary',
-                component: cmp.settings
-            }, {
-                name: 'Sign Out',
-                url: '/sign-out',
-                icon: 'fa fa-sign-out fa-lg',
-                class: 'primary',
-                component: cmp.signIn
-            }]);
-        } else {
-            rNavs = util.extend(rNavs, [{
-                name: 'Sign In',
-                url: '/sign-in',
-                icon: 'fa fa-sign-in fa-lg',
-                class: 'primary',
-                component: cmp.signIn
-            }]);
-        }
         return rNavs;
-    }
-    ;
+    };
     
     var loadRoutes = function() {
+        // restore user
+        system.model.user.restoreUser();
         // fetch the nav items
         system.globalNavItems = loadNavItems();
         // apply the layout to each component in the nav and create the core route object
@@ -151,10 +132,9 @@
         m.route.mode = 'pathname';
         
         m.route(document.body, '/', routes);
-    }
-    ;
+    };
     
     // load models, then components
     system.loadModules(deps, loadRoutes);
-}
-());
+    
+}());

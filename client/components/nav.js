@@ -14,6 +14,20 @@ system.cmp.nav = {
                     left: 0
                 }, speed);
                 
+                ctrl.active.parent = ctrl.getParent(args.activeItem);
+                
+                if(ctrl.active.item !== ctrl.active.parent) {
+                    Velocity(util.q('.nav-two'), {
+                       left: 0
+                    }, speed);
+                    util.shadeElem({
+                        update: '.nav-heading',
+                        from: '.inverse-' + ctrl.active.parent.class.replace(' ', '.'),
+                        attr: 'color',
+                        percent: .1
+                    });
+                }
+                
                 ctrl.visible(true);
             },
             hide: function() {
@@ -50,10 +64,10 @@ system.cmp.nav = {
                 
                 util.shadeElem({
                     update: '.nav-heading',
-                    from: '.inverse-' + item.class.replace(' ', '.'),
+                    from: '.inverse-' + ctrl.active.parent.class.replace(' ', '.'),
                     attr: 'color',
                     percent: .1
-                })
+                });
             },
             hideChildren: function() {
                 Velocity(util.q('.nav-two'), {
@@ -77,12 +91,28 @@ system.cmp.nav = {
                 }
                 
                 return cFound.indexOf(true) > -1;
+            },
+            getParent: function(target, list) {
+                var parent;
+                list = list || system.globalNavItems;
+                list.some(function(item) {
+                   if(target.url === item.url) {
+                       parent = item;
+                       return true;
+                   }
+                   if(item.children && ctrl.getParent(target, item.children)) {
+                       parent = item;
+                       return true;
+                   }
+                });
+                return parent;
             }
         };
+        ctrl.active.parent = ctrl.getParent(args.activeItem);
         return ctrl;
     },
     view: function(ctrl, args) {
-        
+        var isLoggedIn = system.model.user.isLoggedIn();
         return m('div.nav-container', [
             m('div.overlay', {
                 onclick: ctrl.hide
@@ -97,13 +127,18 @@ system.cmp.nav = {
             m('div.nav.nav-one', [
                 m('ul', [
                     args.items.map(function(item, index) {
+                        if((item.auth && !isLoggedIn) || (item.auth === false && isLoggedIn)) return;
                         return m('li', {
                                 role: 'presentation'
                             },
                             m('a', {
                                 class: (ctrl.isActive(item, ctrl.active.item.name) ? '' : 'inverse-') + item.class,
                                 href: item.url,
-                                onclick: (item.children ? ctrl.showChildren.bind(this, item) : ctrl.changeRoute.bind(this, item))
+                                onclick: item.onclick ? function(e) {
+                                    e.preventDefault();
+                                    ctrl.hide();
+                                    item.onclick();
+                                } : (item.children ? ctrl.showChildren.bind(this, item) : ctrl.changeRoute.bind(this, item))
                             }, [
                                 m('i.nav-icon', {
                                     class: item.icon
@@ -124,6 +159,7 @@ system.cmp.nav = {
                 ]),
                 m('ul', [
                     (ctrl.active.parent.children || []).map(function(child, index) {
+                        if((child.auth && !isLoggedIn) || (child.auth === false && isLoggedIn)) return;
                         return m('li', {
                                 role: 'presentation',
                             },

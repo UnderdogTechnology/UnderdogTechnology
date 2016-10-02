@@ -1,19 +1,18 @@
 system.cmp.signUp = {
     controller: function(args) {
-        var count = 0;
         var ctrl = {
             username: m.prop(null),
             email: m.prop(null),
             password: m.prop(null),
             cPassword: m.prop(null),
-            signUp: function() {
-                var user = new system.model.user({
+            signUp: function(evt) {
+                evt.preventDefault();
+                
+                system.model.user.signUp({
                     username: ctrl.username() || '',
                     password: [ctrl.password() || '', ctrl.cPassword() || ''],
                     email: ctrl.email() || ''
-                });
-                
-                user.signUp();
+                }, '/');
             },
             isValid: function(type, value) {
                 if(value === null || value[0] === null) return '';
@@ -25,13 +24,16 @@ system.cmp.signUp = {
     },
     view: function(ctrl, args) {
         return m('div.signup', [
-            m('form.center-form.pure-form.pure-form-aligned', [
+            m('form.center-form.pure-form.pure-form-aligned', {
+                    onsubmit: ctrl.signUp
+            }, [
                 mutil.formGroup([
                     m('label', 'Username'),
                     m('input[type="text"].form-control', {
                         placeholder: 'Username',
                         value: ctrl.username(),
                         onblur: mutil.withValidate('value', 'username', ctrl.username),
+                        onchange: m.withAttr('value', ctrl.username),
                         class: ctrl.isValid('username', ctrl.username())
                     })
                 ]),
@@ -41,6 +43,7 @@ system.cmp.signUp = {
                         placeholder: 'Email',
                         value: ctrl.email(),
                         onblur: mutil.withValidate('value', 'email', ctrl.email),
+                        onchange: m.withAttr('value', ctrl.email),
                         class: ctrl.isValid('email', ctrl.email())
                     })
                 ]),
@@ -50,6 +53,7 @@ system.cmp.signUp = {
                         placeholder: 'Password',
                         value: ctrl.password(),
                         onblur: mutil.withValidate('value', 'password', ctrl.password),
+                        onchange: m.withAttr('value', ctrl.password),
                         class: ctrl.isValid('password', [ctrl.password(), ctrl.cPassword()])
                     })
                 ]),
@@ -59,13 +63,12 @@ system.cmp.signUp = {
                         placeholder: 'Confirm Password',
                         value: ctrl.cPassword(),
                         onblur: mutil.withValidate('value', 'password', ctrl.cPassword),
+                        onchange: m.withAttr('value', ctrl.cPassword),
                         class: ctrl.isValid('password', [ctrl.cPassword(), ctrl.password()])
                     })
-                ]),,
+                ]),
                 mutil.formControls([
-                    m('a.pure-button.btn.primary', {
-                        onclick: ctrl.signUp
-                    }, 'Sign Up'),
+                    m('button[type=submit].pure-button.btn.primary', 'Sign Up'),
                     m('a.pure-button.btn.secondary', {
                         onclick: vutil.changeRoute.bind(this, '/sign-in')
                     }, 'Sign In')

@@ -44,24 +44,20 @@ var util = {
         return string;
     },
     shadeElem: function(args) {
-        if(args) {
-            var update = null,
-                from = null;
-            if(args.update && (update = util.q(args.update))) {
-                if(!args.attr) return false;
-                
-                if(args.from) from = util.q(args.from);
-                
-                var color = args.color || window.getComputedStyle(from || update)[args.attr];
-                
-                if(!color) return false;
-                
-                update.style.background = color.replace('rgb','rgba').replace(')', ',' + (args.percent || .1) + ')');
-                
-                return true;
-            }
-        }
-        return false;
+        if(!args || !args.update || !args.attr) return false;
+        var update = args.update;
+        var from = args.from;
+        
+        if(typeof update === 'string') update = util.q(args.update);
+        if(typeof from === 'string') from = util.q(args.from);
+        
+        var color = args.color || window.getComputedStyle(from || update)[args.attr];
+        
+        if(!color) return false;
+        
+        update.style.background = color.replace('rgb','rgba').replace(')', ',' + (args.percent || .1) + ')');
+        
+        return true;
     },
     findNavItem: function(route, navItems) {
         var found;
@@ -185,31 +181,14 @@ var mutil = {
     withValidate: function(attr, type, prop, submit) {
         return function(evt) {
             var value = evt.target.value;
-            if(!value && !submit) return;
             prop(value);
+            if(!value && !submit) return;
             var status = util.isValid(type, value);
             if(status && !status.isValid) {
                 system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa fa-lg fa-pencil' });
             }
         };
     },
-    createSwitch: function(options, checked, label, cb, attr) {
-        return m('div.tgl-container', [
-            m('label.tgl-label', label),
-            m('div.tgl', attr, [
-                m('label.tgl-btn', {
-                        class: checked ? 'tgl-on' : 'tgl-off'
-                    },
-                    m('div.tgl-opt.secondary', options[0]),
-                    m('div.separator'),
-                    m('div.tgl-opt.primary', options[1]),
-                    m('input[type="checkbox"].tgl-switch', {
-                        checked: checked,
-                        onchange: cb
-                    }))
-            ])
-        ]);
-    }
 };
 
 // reusable config attrs

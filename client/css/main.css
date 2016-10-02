@@ -133,20 +133,54 @@ body {
 }
 
 /*****************
-**    TOGGLE    **
+**     D-BOX    **
 ******************/
 
-.tgl-container .tgl-label {
-    margin-right: 1.6em;
+.d-box {
+    margin: 10px auto;
+    overflow: hidden;
+    transition: height 275ms;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 }
+
+.d-box-header {
+    height: 35px;
+    line-height: 35px;
+    padding-left: .6em;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.d-box-knob {
+    float: right;
+    padding: .6em;
+    transition: transform 275ms;
+}
+
+.d-box-content {
+    padding: .6em;
+}
+
+.d-box-hidden {
+    transition: height 275ms;
+}
+
+.d-box-hidden .d-box-knob {
+    transform: rotate(90deg);
+}
+
+/*****************
+**    TOGGLE    **
+******************/
 
 .tgl {
     border-radius: 2px;
     position: relative;
     height: 25px;
     width: 65px;
-    border: 1px solid #000;
-    color: #fff;
+    border: 1px solid #999;
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
@@ -178,8 +212,8 @@ body {
 }
 
 .tgl .tgl-btn .separator {
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
     width: 10px;
     background: #fff;
 }
@@ -198,6 +232,10 @@ body {
 
 .center-form .pure-controls .btn.primary {
     float: right;
+}
+
+.center-form .pure-controls .btn {
+    margin: 0;
 }
 
 .form-control {
@@ -334,13 +372,25 @@ div.form-control > table {
 ******************/
 
 @media screen and (min-width: 480px) {
+    
+    .alert-visible {
+        top: inherit;
+        bottom: 0px;
+    }
+    
+    .alert-hidden {
+        top: inherit;
+        bottom: -55px;
+    }
     .form-control {
         width: 60%;
     }
     .center-form .pure-controls .btn.primary {
         float: none;
     }
+    
     .center-form .pure-controls .btn {
-        margin: 0 1em !important;
+        margin: 0 1em 0 0 !important;
     }
+
 }

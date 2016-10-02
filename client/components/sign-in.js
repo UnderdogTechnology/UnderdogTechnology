@@ -8,26 +8,28 @@ system.cmp.signIn = {
                 var status = util.isValid(type, value);
                 return status && status.isValid ? 'success' : 'error';
             },
-            signIn: function() {
-                var user = new system.model.user({
+            signIn: function(e) {
+                e.preventDefault();
+                system.model.user.signIn({
                     username: ctrl.username() || '',
                     password: ctrl.password() || ''
-                });
-                
-                user.signIn();
+                }, '/');
             }
         };
         return ctrl;
     },
     view: function(ctrl, args) {
         return m('div.signup', [
-            m('form.center-form.pure-form.pure-form-aligned', [
+            m('form.center-form.pure-form.pure-form-aligned', {
+                onsubmit: ctrl.signIn
+            },[
                 mutil.formGroup([
                     m('label', 'Username'),
                     m('input[type="text"].form-control', {
                         placeholder: 'Username',
                         value: ctrl.username(),
                         onblur: mutil.withValidate('value', 'username', ctrl.username),
+                        onchange: m.withAttr('value', ctrl.username),
                         class: ctrl.isValid('username', ctrl.username())
                     })
                 ]),
@@ -37,13 +39,12 @@ system.cmp.signIn = {
                         placeholder: 'Password',
                         value: ctrl.password(),
                         onblur: mutil.withValidate('value', 'password', ctrl.password),
-                        class: ctrl.isValid('value', ctrl.password())
+                        onchange: m.withAttr('value', ctrl.password),
+                        class: ctrl.isValid('password', ctrl.password())
                     })
                 ]),
                 mutil.formControls([
-                    m('a.pure-button.btn.primary', {
-                        onclick: ctrl.signIn
-                    },'Sign In'),
+                    m('button[type=submit].pure-button.btn.primary', 'Sign In'),
                     m('a.pure-button.btn.secondary', {
                         onclick: vutil.changeRoute.bind(this, '/')
                     }, 'Sign Up')
