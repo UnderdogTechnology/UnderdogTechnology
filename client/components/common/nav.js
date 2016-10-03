@@ -148,7 +148,8 @@ system.cmp.nav = {
                             ])
                         );
                     })
-                ])
+                ]),
+                m.component(system.cmp.footer, {})
             ]), m('div.nav.nav-two', [
                 m('div.nav-heading', {
                     class: 'inverse-' + ctrl.active.parent.class,

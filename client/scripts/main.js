@@ -23,7 +23,14 @@
         // MODELS
         '/models/': ['user'],
         // COMPONENTS
-        '/components/': ['nav', 'home', 'alert', 'detail-box', 'switch', 'plan-it/find', 'settings', 'sign-up', 'sign-in']
+        '/components/': [
+            // COMMON
+            'common/footer', 'common/nav', 'common/alert', 'common/detail-box', 'common/switch',
+            // UNDERDOG
+            'home', 'settings', 'sign-up', 'sign-in',
+            // PLAN-IT
+            'plan-it/find'
+        ]
     };
     
     var layout = function(item) {
