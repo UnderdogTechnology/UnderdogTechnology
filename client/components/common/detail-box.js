@@ -32,6 +32,7 @@ system.cmp.dBox = {
                 }
             },
             m('div.d-box-header.primary', {
+                    class: args.class,
                     onclick: ctrl.toggle  
                 },
                 m('i.d-box-knob', {

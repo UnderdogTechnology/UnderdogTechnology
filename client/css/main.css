@@ -378,6 +378,19 @@ div.form-control > table {
     color: #F0592B;
 }
 
+/* Maybe change this color to something dope af */
+
+.primary.shopper {
+    text-shadow: -1px 0 #ff0707, 0 1px #ff0707, 1px 0 #ff0707, 0 -1px #ff0707;
+    background: #dc3232;
+    border-color: #ff0707;
+}
+
+.inverse-primary.shopper {
+    background: #fff;
+    color: #dc3232;
+}
+
 /*****************
 **   w: 480px   **
 ******************/
@@ -393,9 +406,11 @@ div.form-control > table {
         top: inherit;
         bottom: -55px;
     }
+    
     .form-control {
         width: 60%;
     }
+    
     .center-form .pure-controls .btn.primary {
         float: none;
     }

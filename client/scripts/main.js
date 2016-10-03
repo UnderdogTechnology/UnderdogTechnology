@@ -10,7 +10,8 @@
     db.local.sync(db.remote, {live: true, retry: true}).on('error', console.log.bind(console));
     
     var cmp = system.cmp = {
-        planit: {}
+        planit: {},
+        shopper: {}
     };
     
     var model = system.model = {};
@@ -29,7 +30,9 @@
             // UNDERDOG
             'home', 'settings', 'sign-up', 'sign-in',
             // PLAN-IT
-            'plan-it/find'
+            'plan-it/find',
+            // SHOPPER
+            'shopper/find'
         ]
     };
     
@@ -42,6 +45,16 @@
                 if((item.auth && !isLoggedIn) || (item.auth === false && isLoggedIn)) {
                     // TODO: Set warning message 'You do not have access to view this page.'
                     m.route('/');
+                }
+                
+                // TODO: Should we dynamically change favicon? Or phucket?
+                
+                if(item.favicon) {
+                    var link = document.createElement('link');
+                    link.type = 'image/x-icon';
+                    link.rel = 'shortcut icon';
+                    link.href = '/images/' + item.favicon;
+                    util.q('head').appendChild(link);
                 }
                 return ctrl;
             },
@@ -86,6 +99,20 @@
             auth: false,
             component: cmp.signIn
         // AUTHENTICATED ROUTES
+        }, {
+            name: 'Shopper',
+            icon: 'fa fa-shopping-basket fa-lg',
+            class: 'primary shopper',
+            auth: true,
+            children: [
+                {
+                    name: 'Find',
+                    url: '/shopper/find',
+                    icon: 'fa fa-search fa-lg',
+                    class: 'primary shopper',
+                    component: cmp.shopper.find
+                }
+            ]
         }, {
             name: 'Plan.it',
             icon: 'fa fa-rocket fa-lg',

@@ -76,7 +76,7 @@ system.cmp.nav = {
             },
             isActive: function(item, active) {
                 
-                if(item.name == active) {
+                if(item.url === active) {
                     return true;
                 }
                 
@@ -84,7 +84,7 @@ system.cmp.nav = {
                 
                 if(item.children) {
                     cFound = item.children.map(function(e, i){
-                        if(e.name == active){
+                        if(e.url === active){
                             return true;
                         }
                     });
@@ -132,7 +132,7 @@ system.cmp.nav = {
                                 role: 'presentation'
                             },
                             m('a', {
-                                class: (ctrl.isActive(item, ctrl.active.item.name) ? '' : 'inverse-') + item.class,
+                                class: (ctrl.isActive(item, ctrl.active.item.url) ? '' : 'inverse-') + item.class,
                                 href: item.url,
                                 onclick: item.onclick ? function(e) {
                                     e.preventDefault();
@@ -165,7 +165,7 @@ system.cmp.nav = {
                                 role: 'presentation',
                             },
                             m('a', {
-                                class: (ctrl.isActive(child, ctrl.active.item.name) ? '' : 'inverse-') + child.class,
+                                class: (ctrl.isActive(child, ctrl.active.item.url) ? '' : 'inverse-') + child.class,
                                 href: child.url,
                                 onclick: ctrl.changeRoute.bind(this, child)
                             }, [
