@@ -1,6 +1,5 @@
 system.cmp.settings = {
     controller: function(args) {
-        system.model.user.get();
         var ctrl = {
             username: m.prop(system.model.user.current.username || null),
             email: m.prop(system.model.user.current.serverUser.email || null),

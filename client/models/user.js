@@ -2,7 +2,6 @@
     
     function getError(r) {
         if(r.error) {
-            console.log(r);
             var message = 'Something went wrong.';
             switch(r.error) {
                 case 'unauthorized':
@@ -22,15 +21,6 @@
             m.redraw();
         }
     }
-    
-    // var user = function(user) {
-    //     if(user.username || user.username === '')
-    //         this.username   = user.username;
-    //     if(user.password || user.password === '')
-    //         this.password   = user.password;
-    //     if(user.email || user.email === '')
-    //         this.email      = user.email;
-    // };
     
     var user = {};
     
@@ -57,31 +47,30 @@
     }
     
     user.signIn = function(userObj, route) {
+        user.current = userObj;
         if(!isValid()) return false;
-        var cur = user.current = userObj;
-        system.db.remote.login(cur.username.toLowerCase(), cur.password).then(function() {
+        system.db.remote.login(user.current.username.toLowerCase(), user.current.password).then(function() {
             return user.get();
         }).then(function() {
             if(route) vutil.changeRoute(route);
         }).catch(getError);
-        return cur;
+        return user.current;
     };
     
     user.signUp = function (userObj, route) {
+        user.current = userObj;
         if(!isValid())  return false;
         
-        var cur = user.current = userObj;
-        
-        system.db.remote.signup(cur.username.toLowerCase(), cur.password[0], {
+        system.db.remote.signup(user.current.username.toLowerCase(), user.current.password[0], {
             metadata: {
-                email: cur.email
+                email: user.current.email
             }
         }).then(function(){
             return user.get();
         }).then(function(){
             if(route) vutil.changeRoute(route);
         }).catch(getError);
-        return cur;
+        return user.current;
     };
     
     user.signOut = function() {
@@ -108,7 +97,6 @@
     };
     
     user.get = function() {
-        if(!isValid(true)) return false;
         return system.db.remote.getUser(user.current.username.toLowerCase()).then(function(u) {
             user.current.serverUser = u;
         }).catch(getError);

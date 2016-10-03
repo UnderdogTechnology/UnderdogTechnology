@@ -30,7 +30,6 @@
         return {
             controller: function(args) {
                 document.title = item.name;
-                
                 var ctrl = {};
                 
                 return ctrl;
@@ -112,26 +111,27 @@
     
     var loadRoutes = function() {
         // restore user
-        system.model.user.restoreUser();
-        // fetch the nav items
-        system.globalNavItems = loadNavItems();
-        // apply the layout to each component in the nav and create the core route object
-        var routes = {};
-        system.globalNavItems.forEach(function(item) {
-            if(item.children) {
-                item.children.forEach(function(child){
-                   routes[child.url] = layout(child);
-                });
-            } else {
-                routes[item.url] = layout(item);
-            }
+        system.model.user.restoreUser().then(function() {
+            // fetch the nav items
+            system.globalNavItems = loadNavItems();
+            // apply the layout to each component in the nav and create the core route object
+            var routes = {};
+            system.globalNavItems.forEach(function(item) {
+                if(item.children) {
+                    item.children.forEach(function(child){
+                       routes[child.url] = layout(child);
+                    });
+                } else {
+                    routes[item.url] = layout(item);
+                }
+            });
+            // add any extra non-core routes
+            util.extend(routes, {});
+            // use hash for routing, NOTE: we'll probably change this to slash later once it's hosted
+            m.route.mode = 'pathname';
+            
+            m.route(document.body, '/', routes);
         });
-        // add any extra non-core routes
-        util.extend(routes, {});
-        // use hash for routing, NOTE: we'll probably change this to slash later once it's hosted
-        m.route.mode = 'pathname';
-        
-        m.route(document.body, '/', routes);
     };
     
     // load models, then components

@@ -78,7 +78,7 @@ body {
     bottom: 0;
     min-height: 400px;
     left: -300px;
-    font-size: 17px !important;
+    font-size: 1em !important;
     width: 250px;
     background: #fff;
     z-index: 9999;
@@ -94,8 +94,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 20px;
-    padding: 14px;
+    font-size: 1.25em;
+    padding: .76em;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
@@ -137,7 +137,7 @@ body {
 ******************/
 
 .d-box {
-    margin: 10px auto;
+    margin: .7em auto;
     overflow: hidden;
     transition: height 275ms;
     box-shadow: 0 2px 5px rgba(0,0,0,0.26);
@@ -176,6 +176,7 @@ body {
 ******************/
 
 .tgl {
+    float: right;
     border-radius: 2px;
     position: relative;
     height: 25px;
