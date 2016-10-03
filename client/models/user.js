@@ -17,12 +17,12 @@
                     message = 'You don\'t have permission to perform this action.';
                     break;
             }
-            system.shared.alert.add({type: 'error', message: message, icon: 'fa fa-lg fa-user-times' });
+            system.shared.alert.add({ type: 'error', message: message, icon: 'fa-user-times' });
             m.redraw();
         }
     }
     
-    var user = {};
+    var user = system.model.user = {};
     
     user.current = null;
     
@@ -39,7 +39,7 @@
                 if(status && !status.isValid) {
                     passed = false;
                     if(!ignoreError)
-                        system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa fa-lg fa-pencil' });
+                        system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil' });
                 }
             }
         }
@@ -47,30 +47,29 @@
     }
     
     user.signIn = function(userObj, route) {
-        user.current = userObj;
-        if(!isValid()) return false;
-        system.db.remote.login(user.current.username.toLowerCase(), user.current.password).then(function() {
+        if(!isValid(false, userObj)) return false;
+        user.current = {username: userObj.username};
+        return system.db.remote.login(userObj.username.toLowerCase(), userObj.password).then(function() {
             return user.get();
         }).then(function() {
             if(route) vutil.changeRoute(route);
         }).catch(getError);
-        return user.current;
     };
     
     user.signUp = function (userObj, route) {
-        user.current = userObj;
-        if(!isValid())  return false;
+        if(!isValid(false, userObj))  return false;
         
-        system.db.remote.signup(user.current.username.toLowerCase(), user.current.password[0], {
+        user.current = {username: userObj.username};
+        
+        return system.db.remote.signup(userObj.username.toLowerCase(), userObj.password[0], {
             metadata: {
-                email: user.current.email
+                email: userObj.email
             }
         }).then(function(){
             return user.get();
         }).then(function(){
             if(route) vutil.changeRoute(route);
         }).catch(getError);
-        return user.current;
     };
     
     user.signOut = function() {
@@ -81,7 +80,7 @@
     
     user.getSession = function() {
         return system.db.remote.getSession().catch(function() {
-            system.shared.alert.add({type:'warning', message: 'Could not connect to the server.', icon: 'fa fa-lg fa-user-times'});
+            system.shared.alert.add({type:'warning', message: 'Could not connect to the server.'});
             m.redraw();
         });
     };
@@ -103,20 +102,20 @@
     };
     
     user.update = function(userObj) {
-        if(!isValid(true)) return false;
+        if(!isValid(true, userObj)) return false;
         var meta = {};
         var promises = [];
         for(var attr in userObj) {
             if(userObj.hasOwnProperty(attr)) {
                 if(attr === 'password') {
                     promises.push(system.db.remote.changePassword(user.current.username, userObj.password).then(function() {
-                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa fa-lg fa-user-times'});
+                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
                         m.redraw();
                     }).catch(getError));
                 } else if(attr === 'username') {
                     promises.push(system.db.remote.changeUsername(user.current.username, userObj.username).then(function(r){
                         user.current.username = userObj.username;
-                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa fa-lg fa-user-times'});
+                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
                         m.redraw();
                     }).catch(getError));
                 } else
@@ -130,7 +129,5 @@
         }
         return promises;
     };
-    
-    system.model.user = user;
 
 }());

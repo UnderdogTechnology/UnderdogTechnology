@@ -3,7 +3,7 @@
     var system = window.system = window.system || {};
     
     var db = system.db = {
-        local: new PouchDB('localdb'),
+        local: new PouchDB('localdb', {skipSetup: true}),
         remote: new PouchDB('http://' + (location.host || 'localhost').split(':')[0] + ':5984/remotedb', {skipSetup: true})
     };
     
@@ -23,7 +23,7 @@
         // MODELS
         '/models/': ['user'],
         // COMPONENTS
-        '/components/': ['nav', 'home', 'alert', 'detail-box', 'switch', 'planit/find', 'settings', 'sign-up', 'sign-in']
+        '/components/': ['nav', 'home', 'alert', 'detail-box', 'switch', 'plan-it/find', 'settings', 'sign-up', 'sign-in']
     };
     
     var layout = function(item) {
@@ -31,7 +31,11 @@
             controller: function(args) {
                 document.title = item.name;
                 var ctrl = {};
-                
+                var isLoggedIn = system.model.user.isLoggedIn();
+                if((item.auth && !isLoggedIn) || (item.auth === false && isLoggedIn)) {
+                    // TODO: Set warning message 'You do not have access to view this page.'
+                    m.route('/');
+                }
                 return ctrl;
             },
             view: function(ctrl, args) {

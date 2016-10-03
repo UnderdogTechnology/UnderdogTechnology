@@ -73,6 +73,7 @@ system.cmp.alert = {
                 ctrl.timer();
             }
         };
+        
         system.shared.alert = {
             add: ctrl.add
         };
@@ -88,7 +89,7 @@ system.cmp.alert = {
                 onclick: ctrl.hide
             }, [
                 m('i.alert-icon', {
-                    class: a.icon
+                    class: 'fa fa-lg ' + (a.icon || 'fa-exclamation')
                 }),
                 m('div.alert-text', a.message)
             ])

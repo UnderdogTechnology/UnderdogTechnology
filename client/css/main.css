@@ -136,7 +136,8 @@ body {
 **     D-BOX    **
 ******************/
 
-.d-box {
+.d-box,
+.d-box-hidden {
     margin: .7em auto;
     overflow: hidden;
     transition: height 275ms;
@@ -161,10 +162,6 @@ body {
 
 .d-box-content {
     padding: .6em;
-}
-
-.d-box-hidden {
-    transition: height 275ms;
 }
 
 .d-box-hidden .d-box-knob {

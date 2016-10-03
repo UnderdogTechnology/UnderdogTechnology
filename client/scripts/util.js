@@ -185,7 +185,7 @@ var mutil = {
             if(!value && !submit) return;
             var status = util.isValid(type, value);
             if(status && !status.isValid) {
-                system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa fa-lg fa-pencil' });
+                system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil'});
             }
         };
     },
