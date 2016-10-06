@@ -70,6 +70,9 @@
                 username: userObj.username.toLowerCase(),
                 password: userObj.password[0]
             }, route);
+        }).then(function() {
+            app.shared.alert.add({ type: 'success', message: 'You have successfully signed up!', icon: 'fa-user-plus' });
+            m.redraw();
         }).catch(getError);
     };
     
