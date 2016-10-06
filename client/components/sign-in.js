@@ -26,10 +26,11 @@ app.cmp.signIn = {
                 mutil.formGroup([
                     m('label', 'Username'),
                     m('input[type="text"].form-control', {
+                        autocorrect: 'off',
+                        autocapitalize: 'none',
                         placeholder: 'Username',
                         value: ctrl.username(),
-                        onblur: mutil.withValidate('value', 'username', ctrl.username),
-                        onchange: m.withAttr('value', ctrl.username),
+                        onchange: mutil.withValidate('value', 'username', ctrl.username),
                         class: ctrl.isValid('username', ctrl.username())
                     })
                 ]),
@@ -38,8 +39,7 @@ app.cmp.signIn = {
                     m('input[type="password"].form-control', {
                         placeholder: 'Password',
                         value: ctrl.password(),
-                        onblur: mutil.withValidate('value', 'password', ctrl.password),
-                        onchange: m.withAttr('value', ctrl.password),
+                        onchange: mutil.withValidate('value', 'password', ctrl.password),
                         class: ctrl.isValid('password', ctrl.password())
                     })
                 ]),

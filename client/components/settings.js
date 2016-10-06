@@ -23,11 +23,12 @@ app.cmp.settings = {
                     mutil.formGroup([
                         m('label', 'Username'),
                         m('input[type=text].form-control', {
+                            autocorrect: 'off',
+                            autocapitalize: 'none',
                             readonly: true,
                             placeholder: 'Username',
                             value: ctrl.username(),
-                            onblur: mutil.withValidate('value', 'username', ctrl.username),
-                            onchange: m.withAttr('value', ctrl.username),
+                            onchange: mutil.withValidate('value', 'username', ctrl.username),
                             class: ctrl.isValid('username', ctrl.username())
                         })
                     ]),
@@ -36,8 +37,7 @@ app.cmp.settings = {
                         m('input[type=text].form-control', {
                             placeholder: 'Email',
                             value: ctrl.email(),
-                            onblur: mutil.withValidate('value', 'email', ctrl.email),
-                            onchange: m.withAttr('value', ctrl.email),
+                            onchange: mutil.withValidate('value', 'email', ctrl.email),
                             class: ctrl.isValid('email', ctrl.email())
                         })
                     ]),
@@ -46,8 +46,7 @@ app.cmp.settings = {
                         m('input[type=password].form-control', {
                             placeholder: 'New Password',
                             value: ctrl.password(),
-                            onblur: mutil.withValidate('value', 'password', ctrl.password),
-                            onchange: m.withAttr('value', ctrl.password),
+                            onchange: mutil.withValidate('value', 'password', ctrl.password),
                             class: ctrl.isValid('password', ctrl.password())
                         })
                     ]),
@@ -56,8 +55,7 @@ app.cmp.settings = {
                         m('input[type=password].form-control', {
                             placeholder: 'Confirm Password',
                             value: ctrl.cPassword(),
-                            onblur: mutil.withValidate('value', 'password', ctrl.cPassword),
-                            onchange: m.withAttr('value', ctrl.cPassword),
+                            onchange: mutil.withValidate('value', 'password', ctrl.cPassword),
                             class: ctrl.isValid('password', ctrl.cPassword())
                         })
                     ]),
