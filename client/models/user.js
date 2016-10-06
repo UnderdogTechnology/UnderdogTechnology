@@ -56,7 +56,7 @@
         }).catch(getError);
     };
     
-    user.signUp = function (userObj, route) {
+    user.signUp = function (userObj) {
         if(!isValid(false, userObj))  return false;
         
         user.current = {username: userObj.username};
@@ -65,10 +65,6 @@
             metadata: {
                 email: userObj.email
             }
-        }).then(function(){
-            return user.get();
-        }).then(function(){
-            if(route) vutil.changeRoute(route);
         }).catch(getError);
     };
     
@@ -104,10 +100,18 @@
         
         return app.db.remote.getUser(user.current.username.toLowerCase()).then(function(u) {
             user.current.serverUser = u;
-            system.db.local.put({
-                '_id':'_local/user',
-                user: user.current
-            })
+            return app.db.local.get('_local/user').then(function(r) {
+                return app.db.local.put({
+                    '_id': r['_id'],
+                    '_rev': r['_rev'],
+                    user: user.current
+                });
+            }).catch(function() {
+                return app.db.local.put({
+                    '_id': '_local/user',
+                    user: user.current
+                });
+            });
         }).catch(getError);
     };
     

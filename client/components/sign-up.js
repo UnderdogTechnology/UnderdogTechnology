@@ -7,12 +7,17 @@ app.cmp.signUp = {
             cPassword: m.prop(null),
             signUp: function(evt) {
                 evt.preventDefault();
-                
+                console.log(ctrl.password(), ctrl.cPassword())
                 app.model.user.signUp({
                     username: ctrl.username() || '',
                     password: [ctrl.password() || '', ctrl.cPassword() || ''],
                     email: ctrl.email() || ''
-                }, '/');
+                }).then(function(){
+                    return app.model.user.signIn({
+                        username: ctrl.username() || '',
+                        password: ctrl.password() || ''
+                    }, '/');
+                })
             },
             isValid: function(type, value) {
                 if(value === null || value[0] === null) return '';
