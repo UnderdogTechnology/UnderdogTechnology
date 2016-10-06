@@ -317,11 +317,11 @@ div.form-control > table {
 }
 
 .alert.warning {
-    background: #fcf8e3;
+    background: #f1e7b6;
 }
 
 .alert.success {
-    background: #0BB287;
+    background: #9aefad;
 }
 
 .form-control.error,
