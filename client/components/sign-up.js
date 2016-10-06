@@ -7,7 +7,6 @@ app.cmp.signUp = {
             cPassword: m.prop(null),
             signUp: function(evt) {
                 evt.preventDefault();
-                console.log(ctrl.password(), ctrl.cPassword())
                 app.model.user.signUp({
                     username: ctrl.username() || '',
                     password: [ctrl.password() || '', ctrl.cPassword() || ''],

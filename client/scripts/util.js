@@ -75,7 +75,8 @@ var util = {
         if(value) {
             var regex = null,
                 message = '',
-                valueTwo = null;
+                valueTwo = null,
+                arePasswordsValid = true;
             
             switch(type) {
                 case 'email':
@@ -88,6 +89,7 @@ var util = {
                         valueTwo = value[1];
                         value = value[0]
                     }
+                    console.log(valueTwo, value);
                     message = 'Password must be supplied in the correct format.';
                     break;
                 case 'username':
@@ -98,9 +100,12 @@ var util = {
                     return false;
             }
             
-            if(regex.test(value)) return { isValid: true };
+            if(valueTwo) {
+                arePasswordsValid = (valueTwo === value && regex.test(valueTwo));
+                message = "Passwords must match";
+            }
             
-            if(valueTwo && regex.test(valueTwo) && regex.test(valueTwo)) message = "Passwords must match";
+            if(regex.test(value) && arePasswordsValid) return { isValid: true };
             
         } else {
             switch(type) {
