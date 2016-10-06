@@ -11,12 +11,7 @@ app.cmp.signUp = {
                     username: ctrl.username() || '',
                     password: [ctrl.password() || '', ctrl.cPassword() || ''],
                     email: ctrl.email() || ''
-                }).then(function(){
-                    return app.model.user.signIn({
-                        username: ctrl.username() || '',
-                        password: ctrl.password() || ''
-                    }, '/');
-                })
+                }, '/')
             },
             isValid: function(type, value) {
                 if(value === null || value[0] === null) return '';

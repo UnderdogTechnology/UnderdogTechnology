@@ -56,7 +56,7 @@
         }).catch(getError);
     };
     
-    user.signUp = function (userObj) {
+    user.signUp = function (userObj, route) {
         if(!isValid(false, userObj))  return false;
         
         user.current = {username: userObj.username};
@@ -65,6 +65,11 @@
             metadata: {
                 email: userObj.email
             }
+        }).then(function(){
+            return app.model.user.signIn({
+                username: userObj.username.toLowerCase(),
+                password: userObj.password[0]
+            }, route);
         }).catch(getError);
     };
     

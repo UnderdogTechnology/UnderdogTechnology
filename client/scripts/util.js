@@ -89,7 +89,6 @@ var util = {
                         valueTwo = value[1];
                         value = value[0]
                     }
-                    console.log(valueTwo, value);
                     message = 'Password must be supplied in the correct format.';
                     break;
                 case 'username':
