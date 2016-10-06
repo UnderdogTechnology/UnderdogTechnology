@@ -1,18 +1,22 @@
-system.cmp.dBox = {
+app.cmp.common.dBox = {
     controller: function(args) {
         var ctrl = {
             contentHeight: m.prop(null),
             hidden: m.prop(true),
             getContentHeight: function(e) {
                 var height = window.getComputedStyle(util.q('.d-box-content', e.currentTarget.parentNode))['height'];
-                ctrl.contentHeight(parseInt(height.slice(0, height.length - 2)) + 35 + 20);
+                ctrl.contentHeight(parseInt(height.slice(0, height.length - 2)) + 36 + 20);
             },
             show: function(evt) {
                 ctrl.getContentHeight(evt);
                 ctrl.hidden(false);
             },
-            hide: function() {
-              ctrl.hidden(true);
+            hide: function(evt) {
+                ctrl.hidden(true);
+                
+                if(args.onhide) {
+                    setTimeout(args.onhide, 275)
+                }
             },
             toggle: function(evt) {
                 if(ctrl.hidden()) {
@@ -28,7 +32,7 @@ system.cmp.dBox = {
         return m('div.d-box', {
                 class: ctrl.hidden() ? 'd-box-hidden' : '', 
                 style: {
-                    height: (ctrl.hidden() ? 35 : ctrl.contentHeight() || 35) + 'px'
+                    height: (ctrl.hidden() ? 36 : ctrl.contentHeight() || 36) + 'px'
                 }
             },
             m('div.d-box-header.primary', {

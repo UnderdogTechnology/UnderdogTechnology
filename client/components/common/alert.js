@@ -1,4 +1,4 @@
-system.cmp.alert = {
+app.cmp.common.alert = {
     controller: function(args) {
         var speed = 275,
             key = 0;
@@ -74,7 +74,7 @@ system.cmp.alert = {
             }
         };
         
-        system.shared.alert = {
+        app.shared.alert = {
             add: ctrl.add
         };
         return ctrl;

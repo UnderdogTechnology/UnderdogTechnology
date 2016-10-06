@@ -1,22 +1,28 @@
 /* global util,m */
 (function() {
-    var system = window.system = window.system || {};
+    var app = window.app = window.app || {};
     
-    var db = system.db = {
+    var db = app.db = {
         local: new PouchDB('localdb', {skipSetup: true}),
-        remote: new PouchDB('http://' + (location.host || 'localhost').split(':')[0] + ':5984/remotedb', {skipSetup: true})
+        remote: new PouchDB('http://' + (location.host || 'localhost').split(':')[0] + ':5984/remotedb', {skipSetup: true}),
+        connected: true
     };
     
-    db.local.sync(db.remote, {live: true, retry: true}).on('error', console.log.bind(console));
+    db.remote.info().then(function() {
+        db.local.sync(db.remote, {live: true, retry: true}).on('error', console.log.bind(console));
+    }).catch(function(){
+        db.connected = false;
+    });
     
-    var cmp = system.cmp = {
+    var cmp = app.cmp = {
+        common: {},
         planit: {},
         shopper: {}
     };
     
-    var model = system.model = {};
+    var model = app.model = {};
     
-    system.shared = {
+    app.shared = {
         user: null
     };
     
@@ -30,7 +36,7 @@
             // UNDERDOG
             'home', 'settings', 'sign-up', 'sign-in',
             // PLAN-IT
-            'plan-it/find',
+            'plan-it/find', 'plan-it/edit',
             // SHOPPER
             'shopper/find'
         ]
@@ -41,35 +47,27 @@
             controller: function(args) {
                 document.title = item.name;
                 var ctrl = {};
-                var isLoggedIn = system.model.user.isLoggedIn();
+                var isLoggedIn = app.model.user.isLoggedIn();
+                
                 if((item.auth && !isLoggedIn) || (item.auth === false && isLoggedIn)) {
                     // TODO: Set warning message 'You do not have access to view this page.'
                     m.route('/');
                 }
                 
-                // TODO: Should we dynamically change favicon? Or phucket?
-                
-                if(item.favicon) {
-                    var link = document.createElement('link');
-                    link.type = 'image/x-icon';
-                    link.rel = 'shortcut icon';
-                    link.href = '/images/' + item.favicon;
-                    util.q('head').appendChild(link);
-                }
                 return ctrl;
             },
             view: function(ctrl, args) {
                 return m('div.underdog-technology', [
-                    m.component(cmp.nav, {
+                    m.component(cmp.common.nav, {
                         activeItem: item,
-                        items: system.globalNavItems
+                        items: app.globalNavItems
                     }),
                     m('div.content', m.component(item.component, args[0])),
                     m('div.loading',
                         m('img', {
                             src: '/images/loading.gif'
                         })
-                    ), m.component(cmp.alert, {})
+                    ), m.component(cmp.common.alert, {})
                 ]);
             }
         };
@@ -110,6 +108,7 @@
                     url: '/shopper/find',
                     icon: 'fa fa-search fa-lg',
                     class: 'primary shopper',
+                    auth: true,
                     component: cmp.shopper.find
                 }
             ]
@@ -118,13 +117,23 @@
             icon: 'fa fa-rocket fa-lg',
             class: 'primary planit',
             auth: true,
+            slogan: 'Randomize your choice.',
             children: [
                 {
                     name: 'Find',
                     url: '/plan-it/find',
                     icon: 'fa fa-search fa-lg',
                     class: 'primary planit',
+                    auth: true,
                     component: cmp.planit.find
+                },
+                {
+                    name: 'Edit',
+                    url: '/plan-it/edit',
+                    icon: 'fa fa-pencil-square-o fa-lg',
+                    class: 'primary planit',
+                    auth: true,
+                    component: cmp.planit.edit
                 }
             ]
         }, {
@@ -140,7 +149,7 @@
             auth: true,
             class: 'primary',
             onclick: function(e) {
-                system.model.user.signOut();
+                app.model.user.signOut();
                 vutil.changeRoute('/sign-in');
             }
         }];
@@ -149,12 +158,12 @@
     
     var loadRoutes = function() {
         // restore user
-        system.model.user.restoreUser().then(function() {
+        app.model.user.restoreUser().then(function() {
             // fetch the nav items
-            system.globalNavItems = loadNavItems();
+            app.globalNavItems = loadNavItems();
             // apply the layout to each component in the nav and create the core route object
             var routes = {};
-            system.globalNavItems.forEach(function(item) {
+            app.globalNavItems.forEach(function(item) {
                 if(item.children) {
                     item.children.forEach(function(child){
                        routes[child.url] = layout(child);
@@ -173,6 +182,6 @@
     };
     
     // load models, then components
-    system.loadModules(deps, loadRoutes);
+    app.loadModules(deps, loadRoutes);
     
 }());

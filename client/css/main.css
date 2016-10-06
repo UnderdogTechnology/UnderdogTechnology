@@ -78,7 +78,7 @@ body {
     bottom: 0;
     min-height: 400px;
     left: -300px;
-    font-size: 1em !important;
+    font-size: 1.2em !important;
     width: 250px;
     background: #fff;
     z-index: 9999;
@@ -138,6 +138,7 @@ body {
 
 .d-box,
 .d-box-hidden {
+    border-radius: 2px;
     margin: .7em auto;
     overflow: hidden;
     transition: height 275ms;
@@ -145,8 +146,8 @@ body {
 }
 
 .d-box-header {
-    height: 35px;
-    line-height: 35px;
+    height: 36px;
+    line-height: 36px;
     padding-left: .6em;
     font-weight: bold;
     cursor: pointer;
@@ -265,9 +266,6 @@ div.form-control > table {
 .footer {
     font-size: .6em;
     text-align: center;
-}
-
-.nav .footer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -345,7 +343,7 @@ div.form-control > table {
 ******************/
 
 .primary {
-    text-shadow: -1px 0 #515b7d, 0 1px #515b7d, 1px 0 #515b7d, 0 -1px #515b7d;
+    /*text-shadow: -1px 0 #515b7d, 0 1px #515b7d, 1px 0 #515b7d, 0 -1px #515b7d;*/
     background: #41518e;
     border-color: #515b7d;
     color: #fff;
@@ -368,7 +366,7 @@ div.form-control > table {
 }
 
 .primary.planit {
-    text-shadow: -1px 0 #B54132, 0 1px #B54132, 1px 0 #B54132, 0 -1px #B54132;
+    /*text-shadow: -1px 0 #B54132, 0 1px #B54132, 1px 0 #B54132, 0 -1px #B54132;*/
     background: #F0592B;
     border-color: #B54132;
 }
@@ -381,7 +379,7 @@ div.form-control > table {
 /* Maybe change this color to something dope af */
 
 .primary.shopper {
-    text-shadow: -1px 0 #ff0707, 0 1px #ff0707, 1px 0 #ff0707, 0 -1px #ff0707;
+    /*text-shadow: -1px 0 #ff0707, 0 1px #ff0707, 1px 0 #ff0707, 0 -1px #ff0707;*/
     background: #dc3232;
     border-color: #ff0707;
 }
@@ -409,6 +407,10 @@ div.form-control > table {
     
     .form-control {
         width: 60%;
+    }
+    
+    .center-form .pure-controls {
+        margin: .7em 0 0;
     }
     
     .center-form .pure-controls .btn.primary {

@@ -1,9 +1,9 @@
-system.cmp.footer = {
+app.cmp.common.footer = {
     controller: function(args) {
         var ctrl = {};
         return ctrl;
     },
     view: function(ctrl, args) {
-        return m('div.footer', ['Underdog Technology 2016', m('i.fa.fa-copyright')]);
+        return m('div.footer', args.text || m.trust('Underdog Technology &copy; 2016'));
     }
 };

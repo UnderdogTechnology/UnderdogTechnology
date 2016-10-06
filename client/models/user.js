@@ -17,12 +17,12 @@
                     message = 'You don\'t have permission to perform this action.';
                     break;
             }
-            system.shared.alert.add({ type: 'error', message: message, icon: 'fa-user-times' });
+            app.shared.alert.add({ type: 'error', message: message, icon: 'fa-user-times' });
             m.redraw();
         }
     }
     
-    var user = system.model.user = {};
+    var user = app.model.user = {};
     
     user.current = null;
     
@@ -39,7 +39,7 @@
                 if(status && !status.isValid) {
                     passed = false;
                     if(!ignoreError)
-                        system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil' });
+                        app.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil' });
                 }
             }
         }
@@ -49,7 +49,7 @@
     user.signIn = function(userObj, route) {
         if(!isValid(false, userObj)) return false;
         user.current = {username: userObj.username};
-        return system.db.remote.login(userObj.username.toLowerCase(), userObj.password).then(function() {
+        return app.db.remote.login(userObj.username.toLowerCase(), userObj.password).then(function() {
             return user.get();
         }).then(function() {
             if(route) vutil.changeRoute(route);
@@ -61,7 +61,7 @@
         
         user.current = {username: userObj.username};
         
-        return system.db.remote.signup(userObj.username.toLowerCase(), userObj.password[0], {
+        return app.db.remote.signup(userObj.username.toLowerCase(), userObj.password[0], {
             metadata: {
                 email: userObj.email
             }
@@ -73,19 +73,21 @@
     };
     
     user.signOut = function() {
-        system.db.remote.logout();
+        app.db.remote.logout();
         user.current = null;
         return user.current;
     };
     
     user.getSession = function() {
-        return system.db.remote.getSession().catch(function() {
-            system.shared.alert.add({type:'warning', message: 'Could not connect to the server.'});
+        return app.db.remote.getSession().catch(function() {
+            app.shared.alert.add({type:'warning', message: 'Could not connect to the server.'});
             m.redraw();
         });
     };
     
     user.restoreUser = function() {
+        if(!app.db.connected) return user.get();
+        
         return user.getSession().then(function(sesh) {
             if(!sesh.userCtx.name) return;
             user.current = {
@@ -96,8 +98,16 @@
     };
     
     user.get = function() {
-        return system.db.remote.getUser(user.current.username.toLowerCase()).then(function(u) {
+        if(!app.db.connected) return app.db.local.get('_local/user').then(function(u){
+            user.current = u.user;
+        });
+        
+        return app.db.remote.getUser(user.current.username.toLowerCase()).then(function(u) {
             user.current.serverUser = u;
+            system.db.local.put({
+                '_id':'_local/user',
+                user: user.current
+            })
         }).catch(getError);
     };
     
@@ -108,14 +118,14 @@
         for(var attr in userObj) {
             if(userObj.hasOwnProperty(attr)) {
                 if(attr === 'password') {
-                    promises.push(system.db.remote.changePassword(user.current.username, userObj.password).then(function() {
-                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
+                    promises.push(app.db.remote.changePassword(user.current.username, userObj.password).then(function() {
+                        app.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
                         m.redraw();
                     }).catch(getError));
                 } else if(attr === 'username') {
-                    promises.push(system.db.remote.changeUsername(user.current.username, userObj.username).then(function(r){
+                    promises.push(app.db.remote.changeUsername(user.current.username, userObj.username).then(function(r){
                         user.current.username = userObj.username;
-                        system.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
+                        app.shared.alert.add({type:'success', message: 'Password has been successfully updated.', icon: 'fa-user-times'});
                         m.redraw();
                     }).catch(getError));
                 } else
@@ -123,7 +133,7 @@
             }
         }
         if(Object.keys(meta).length) {
-            promises.push(system.db.remote.putUser(user.current.username, {
+            promises.push(app.db.remote.putUser(user.current.username, {
                 metadata: meta
             }).then(user.get).catch(getError));
         }

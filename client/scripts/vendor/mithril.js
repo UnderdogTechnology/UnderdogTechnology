@@ -386,7 +386,7 @@ var m = (function app(window, undefined) {
 				try {
 					//`config` isn't a real attributes, so ignore it
 					if (attrName === "config" || attrName == "key") continue;
-					//hook event handlers to the auto-redrawing system
+					//hook event handlers to the auto-redrawing app
 					else if (typeof dataAttr === FUNCTION && attrName.indexOf("on") === 0) {
 						node[attrName] = autoredraw(dataAttr, node)
 					}

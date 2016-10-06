@@ -1,6 +1,7 @@
 {
-	"name": "http://45.55.91.179:10899/",
+	"name": "Underdog Technology",
 	"icons": [],
-	"theme_color": "#F0592B",
+	"theme_color": "#41518e",
+	"background_color": "#41518e",
 	"display": "standalone"
 }

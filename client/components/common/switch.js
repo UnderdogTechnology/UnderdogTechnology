@@ -1,4 +1,4 @@
-system.cmp.switch = {
+app.cmp.common.switch = {
     controller: function(args) {
         var ctrl = {};
         return ctrl;

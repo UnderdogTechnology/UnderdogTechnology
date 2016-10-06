@@ -1,4 +1,4 @@
-system.cmp.home = {
+app.cmp.home = {
     controller: function(args) {
         var ctrl = {};
         return ctrl;

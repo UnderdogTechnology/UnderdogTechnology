@@ -1,4 +1,4 @@
-system.cmp.signUp = {
+app.cmp.signUp = {
     controller: function(args) {
         var ctrl = {
             username: m.prop(null),
@@ -8,7 +8,7 @@ system.cmp.signUp = {
             signUp: function(evt) {
                 evt.preventDefault();
                 
-                system.model.user.signUp({
+                app.model.user.signUp({
                     username: ctrl.username() || '',
                     password: [ctrl.password() || '', ctrl.cPassword() || ''],
                     email: ctrl.email() || ''

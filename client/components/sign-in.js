@@ -1,4 +1,4 @@
-system.cmp.signIn = {
+app.cmp.signIn = {
     controller: function(args) {
         var ctrl = {
             username: m.prop(null),
@@ -10,7 +10,7 @@ system.cmp.signIn = {
             },
             signIn: function(e) {
                 e.preventDefault();
-                system.model.user.signIn({
+                app.model.user.signIn({
                     username: ctrl.username() || '',
                     password: ctrl.password() || ''
                 }, '/');

@@ -1,5 +1,5 @@
-/* global system,util,m,eutil */
-system.cmp.results = {
+/* global app,util,m,eutil */
+app.cmp.results = {
     controller: function(args) {
         var settings = args.settings,
             model = args.model;

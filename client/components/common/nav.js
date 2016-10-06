@@ -1,4 +1,4 @@
-system.cmp.nav = {
+app.cmp.common.nav = {
     controller: function(args) {
         var speed = 275;
         var ctrl = {
@@ -94,7 +94,7 @@ system.cmp.nav = {
             },
             getParent: function(target, list) {
                 var parent;
-                list = list || system.globalNavItems;
+                list = list || app.globalNavItems;
                 list.some(function(item) {
                    if(target.url === item.url) {
                        parent = item;
@@ -112,7 +112,7 @@ system.cmp.nav = {
         return ctrl;
     },
     view: function(ctrl, args) {
-        var isLoggedIn = system.model.user.isLoggedIn();
+        var isLoggedIn = app.model.user.isLoggedIn();
         return m('div.nav-container', [
             m('div.overlay', {
                 onclick: ctrl.hide
@@ -149,7 +149,7 @@ system.cmp.nav = {
                         );
                     })
                 ]),
-                m.component(system.cmp.footer, {})
+                m.component(app.cmp.common.footer, {})
             ]), m('div.nav.nav-two', [
                 m('div.nav-heading', {
                     class: 'inverse-' + ctrl.active.parent.class,
@@ -176,7 +176,8 @@ system.cmp.nav = {
                             ])
                         );
                     })
-                ])
+                ]),
+                m.component(app.cmp.common.footer, {text: ctrl.active.parent.slogan})
             ])
         ]);
     }

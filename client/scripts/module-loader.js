@@ -1,6 +1,6 @@
 (function() {
 
-    var system = window.system = window.system || {};
+    var app = window.app = window.app || {};
 
     var addScript = function(src, cb) {
         var script = document.createElement('script');
@@ -9,7 +9,7 @@
         document.head.appendChild(script);
     };
 
-    system.loadModules = function(deps, done) { 
+    app.loadModules = function(deps, done) { 
 
         var dir;
         var loaded = 0;

@@ -1,4 +1,4 @@
-system.cmp.shopper.find = {
+app.cmp.shopper.find = {
     controller: function(args) {
         var ctrl = {};
         return ctrl;

@@ -1,8 +1,8 @@
-system.cmp.settings = {
+app.cmp.settings = {
     controller: function(args) {
         var ctrl = {
-            username: m.prop(system.model.user.current.username || null),
-            email: m.prop(system.model.user.current.serverUser.email || null),
+            username: m.prop(app.model.user.current.username || null),
+            email: m.prop(app.model.user.current.serverUser.email || null),
             password: m.prop(null),
             cPassword: m.prop(null),
             isChecked: m.prop(false),
@@ -17,7 +17,7 @@ system.cmp.settings = {
     view: function(ctrl, args) {
         
         return m('div.settings', [
-            m.component(system.cmp.dBox, {
+            m.component(app.cmp.common.dBox, {
                 header: 'Account Details',
                 content: m('form.center-form.pure-form.pure-form-aligned', [
                     mutil.formGroup([
@@ -67,7 +67,7 @@ system.cmp.settings = {
                     ])
                 ])
             }),
-            m.component(system.cmp.switch, {
+            m.component(app.cmp.common.switch, {
                 options: ['On', 'Off'],
                 param: ctrl.isChecked,
                 label: 'Testing'

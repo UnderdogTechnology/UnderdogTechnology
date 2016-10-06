@@ -61,7 +61,7 @@ var util = {
     },
     findNavItem: function(route, navItems) {
         var found;
-        (navItems || system.globalNavItems).some(function(item) {
+        (navItems || app.globalNavItems).some(function(item) {
             if(item.url === route) {
                 found = item;
             } else if(item.children) {
@@ -185,7 +185,7 @@ var mutil = {
             if(!value && !submit) return;
             var status = util.isValid(type, value);
             if(status && !status.isValid) {
-                system.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil'});
+                app.shared.alert.add({ type: 'error', message: status.message, icon: 'fa-pencil'});
             }
         };
     },
