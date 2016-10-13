@@ -31,7 +31,7 @@
         '/models/': [
             'user',
             // STORY
-            'story/chapters', 'story/encounters', 'story/characters', 'story/dialogue', 'story/emotions'
+            'story/chapters', 'story/encounters', 'story/characters', 'story/dialogs', 'story/emotions'
         ],
         // COMPONENTS
         '/components/': [

@@ -1,4 +1,4 @@
-app.model.dialogue = function() {
+app.model.dialogs = function() {
     var curId = 0;
     
     var newLine = function(o) {
@@ -33,7 +33,7 @@ app.model.dialogue = function() {
             
             if(!Object.keys(line).length) return false;
             
-            var id = !isNaN(o.id) ? o.id : curId++;
+            var id = o.id || curId++;
             
             line.id = id;
             

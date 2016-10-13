@@ -339,6 +339,26 @@ div.form-control > table {
 }
 
 /*****************
+**    PROMPT    **
+******************/
+
+.prompt .output {
+    position:absolute;
+    top:36px;
+    right:0;
+    left:0;
+    bottom:0;
+    background: #999;
+    color: #555;
+}
+
+.prompt .input {
+    position:absolute;
+    top:0;
+    height: 30px;
+}
+
+/*****************
 **    COLORS    **
 ******************/
 

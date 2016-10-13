@@ -1,91 +1,141 @@
 app.cmp.story = {
     controller: function(args) {
-        var curChapter,
-            curEncounter;
+        // Cached variables
+        var _ = {};
             
         var ctrl = {
-            start: function() {
-                // TODO: Load all chapters, encounters and characters, refecence by unique Ids 'intro', 'bar', etc.
-                ctrl.chapters = app.model.chapters();
-                loadChapter('intro');
+            dialogue: function(id) {
+              return _.dialogs[id];  
+            },
+            chapters: function(id) {
+                return _.chapters[id];
+            },
+            encounters: function(id) {
+                return _.encounters[id];
+            },
+            characters: function(id) {
+                return _.characters[id];
+            },
+            input: function(e) {
+                var input = e.target.value;
                 
-                ctrl.encounters = new app.model.encounters();
-                loadEncounter('bar');
+                if(/^~!/.test(input)) {
+                    var command = input.replace('~!', '').trim();
+                    
+                    switch(command) {
+                        case 'restart':
+                        case 'start':
+                            start();
+                            break;
+                        case 'change name':
+                            ctrl.characters('narrator').speak('What would you like to change your name to?', function(response) {
+                                ctrl.characters('narrator').speak('Your name has been changed to ' + (ctrl.characters(_.about).name = response))
+                            });
+                            break;
+                        default:
+                            try {
+                                eval('console.log(' + command + ')');
+                                ctrl.characters('narrator').speak('Check the console for results.');
+                            } catch(e){
+                                ctrl.characters('narrator').speak('Command not found.');
+                            }
+                            break;
+                    }
+                } else if(_.dialogue && _.dialogue.cb) {
+                    _.dialogue.cb(input);
+                }
                 
-                ctrl.characters = app.model.characters();
-                loadCharacter();
-                
-                var player = ctrl.characters.add({
-                   role: 'Player',
-                   name: 'Divide'
-                });
-                
-                ctrl.about = player.id;
+                e.target.value = '';
             }
         };
+        
+        var start = function() {
+            _ = {};
             
-        var loadChapter = function() {
-            var chapter = ctrl.chapters.add({
-                title: 'First Chapter'
-            });
+            _.dialogs = app.model.dialogs();
+            _.characters = app.model.characters();
             
-            chapter.encounters = [];
+            _.chapters = app.model.chapters();
+            loadChapter('intro');
             
-            curChapter = chapter;
+            _.encounters = app.model.encounters();
+            loadEncounter('intro');
+        };
+            
+        var loadChapter = function(id) {
+            var chapter = _.chapters.add({id: id});
+            
+            ctrl.chapter = chapter;
             
             return chapter;
         };
         
-        var loadEncounter = function() {
-            var encounter = ctrl.encounters.add({
-               type: 'Dialogue',
-               dialogue: new app.model.dialogue()
+        var loadEncounter = function(id) {
+            ctrl.encounter = _.encounters.add({
+                id: id,
+                begin: function() {
+                    return this.start(ctrl, _);
+                }
             });
             
-            encounter.with = [];
+            ctrl.chapter.encounters.push(ctrl.encounter.id);
             
-            curEncounter = encounter;
+            loadCharacter('narrator');
             
-            curChapter.encounters.push(encounter.id);
+            ctrl.encounter.begin();
             
-            return encounter;
+            return ctrl.encounter;
         };
         
-        var loadCharacter = function() {
-            var speak = function(line) {
-                return curEncounter.dialogue.add({
+        var loadCharacter = function(id) {
+            var speak = function(line, cb) {
+                _.dialogue = _.dialogs.add({
                     text: line,
-                    character: this.id
+                    character: this.id,
+                    cb: cb || null
                 });
+                
+                ctrl.encounter.dialogue.push(_.dialogue.id);
+                
+                return _.dialogue;
             }
             
-            var narrator = ctrl.characters.add({
-                name: 'Narrator',
-                role: 'NPC',
-                speak: speak
+            var perform = function(action, cb) {
+                ctrl.characters('narrator').speak(this.name + ' has ' + action, cb);
+            }
+            
+            var character = _.characters.add({
+                id: id,
+                speak: speak,
+                perform: perform
             });
             
-            curEncounter.with.push(narrator.id);
+            ctrl.encounter.with.push(character.id);
             
-            var barKeep = ctrl.characters.add({
-                name: 'Bar Keep',
-                role: 'NPC',
-                speak: speak
-            });
+            if(id !== 'narrator') ctrl.characters('narrator').speak(character.name + ' enters the ' + ctrl.encounter.place)
             
-            curEncounter.with.push(barKeep.id);
-            
-            return [narrator, barKeep];
+            return character;
         };
         
+        start();
         return ctrl;
     },
     view: function(ctrl, args) {
-        ctrl.start();
         
-        return m('div.story',[
-            m('div.output'),
-            m('input[type=text]')
-        ]);
+        return m('div.story',
+            m('div.prompt', [
+                m('input[type=text].input', {
+                    onchange: ctrl.input
+                }),
+                m('div.output', ctrl.encounter.dialogue.map(function(id){
+                    var dialogue = ctrl.dialogue(id);
+                    return m('p', [
+                        m('span', ctrl.characters(dialogue.character).name),
+                        m('span', ': '),
+                        m('span', dialogue.text)
+                    ]);
+                }))
+            ])
+        );
     }
 };

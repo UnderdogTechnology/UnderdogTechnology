@@ -1,4 +1,4 @@
-app.model.characters = function(list) {
+app.model.characters = function(init) {
     var curId = 0;
     
     var newCharacter = function(o) {
@@ -21,6 +21,10 @@ app.model.characters = function(list) {
     
     var _ = {
         add: function(o) {
+            if(!o) return false;
+            
+            if(o.id && index[o.id]) util.extend(o, index[o.id]);
+            
             return _.set(o);
         },
         remove: function(id) {
@@ -31,26 +35,27 @@ app.model.characters = function(list) {
         set: function(o) {
             if(!o) return false;
             
-            var character = new newCharacter(o);
+            var character = newCharacter(o);
             
             if(!Object.keys(character).length) return false;
             
-            var id = !isNaN(o.id) ? o.id : curId++;
+            var id = o.id || curId++;
             
             character.id = id;
             
             return (_[id] = character);
         },
-        find: function(o) {
+        get: function(o) {
             if(!o) return false;
             
             if(o.id && _[o.id]) return _[o.id];
+            
             var character;
             for(var id in _) {
                 if(_.hasOwnProperty(id)) {
                     var match = true;
-                    
                     character = _[id];
+                    
                     for(var attr in o) {
                         if(o.hasOwnProperty(attr) && character.hasOwnProperty(attr) && o[attr] !== character[attr]){
                             match = false;
@@ -66,13 +71,17 @@ app.model.characters = function(list) {
         }
     };
     
-    if(list) {
-        for(var character in list) {
-            if(list.hasOwnProperty(character)) {
-                _.add(list[character]);
-            }
+    var index = {
+        'narrator': {
+            id: 'narrator',
+            name: 'Narrator',
+            role: 'NPC'
+        }, 
+        'guard': {
+            name: 'Guard',
+            role: 'NPC'
         }
-    }
+    };
     
     return _;
 }

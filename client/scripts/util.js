@@ -10,7 +10,7 @@ var util = {
     qq: function(q, c) {
         return [].slice.call((c || document).querySelectorAll(q));
     },
-    extend: function(aObj, bObj) {
+    extend: function(aObj, bObj, overwrite) {
         if(Array.isArray(aObj) && !Array.isArray(bObj)) {
                 aObj.push(bObj);
         }
@@ -19,7 +19,7 @@ var util = {
             {
                 if(Array.isArray(aObj)) {
                     aObj.push(bObj[key]);
-                } else if(bObj.hasOwnProperty(key)) {
+                } else if(bObj.hasOwnProperty(key) && (!aObj.hasOwnProperty(key) || overwrite)) {
                     aObj[key] = bObj[key];
                 }
 
