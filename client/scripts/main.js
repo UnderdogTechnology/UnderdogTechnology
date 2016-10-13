@@ -28,7 +28,11 @@
     
     var deps = {
         // MODELS
-        '/models/': ['user'],
+        '/models/': [
+            'user',
+            // STORY
+            'story/chapters', 'story/encounters', 'story/characters', 'story/dialogue', 'story/emotions'
+        ],
         // COMPONENTS
         '/components/': [
             // COMMON
@@ -37,8 +41,8 @@
             'home', 'settings', 'sign-up', 'sign-in',
             // PLAN-IT
             'plan-it/find', 'plan-it/edit',
-            // SHOPPER
-            'shopper/find'
+            // STORY
+            'story/index'
         ]
     };
     
@@ -96,23 +100,16 @@
             class: 'primary',
             auth: false,
             component: cmp.signIn
+        }, {
+            name: 'Story',
+            url: '/story',
+            icon: 'fa fa-bookmark fa-lg',
+            class: 'primary story',
+            component: cmp.story,
+            auth: false
+        }, 
         // AUTHENTICATED ROUTES
-        }, {
-            name: 'Shopper',
-            icon: 'fa fa-shopping-basket fa-lg',
-            class: 'primary shopper',
-            auth: true,
-            children: [
-                {
-                    name: 'Find',
-                    url: '/shopper/find',
-                    icon: 'fa fa-search fa-lg',
-                    class: 'primary shopper',
-                    auth: true,
-                    component: cmp.shopper.find
-                }
-            ]
-        }, {
+        {
             name: 'Plan.it',
             icon: 'fa fa-rocket fa-lg',
             class: 'primary planit',

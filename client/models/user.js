@@ -48,7 +48,9 @@
     
     user.signIn = function(userObj, route) {
         if(!isValid(false, userObj)) return false;
+        //TODO: sign in with email
         user.current = {username: userObj.username};
+        
         return app.db.remote.login(userObj.username.toLowerCase(), userObj.password).then(function() {
             return user.get();
         }).then(function() {

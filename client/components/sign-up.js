@@ -7,11 +7,17 @@ app.cmp.signUp = {
             cPassword: m.prop(null),
             signUp: function(evt) {
                 evt.preventDefault();
-                app.model.user.signUp({
+                
+                app.model.user.signIn({
                     username: ctrl.username() || '',
-                    password: [ctrl.password() || '', ctrl.cPassword() || ''],
-                    email: ctrl.email() || ''
-                }, '/')
+                    password: ctrl.password() || ''
+                }, '/').catch(function() {
+                    app.model.user.signUp({
+                        username: ctrl.username() || '',
+                        password: [ctrl.password() || '', ctrl.cPassword() || ''],
+                        email: ctrl.email() || ''
+                    }, '/');
+                })
             },
             isValid: function(type, value) {
                 if(value === null || value[0] === null) return '';
@@ -64,6 +70,9 @@ app.cmp.signUp = {
                         class: ctrl.isValid('password', [ctrl.cPassword(), ctrl.password()])
                     })
                 ]),
+                m('div.g-recaptcha', {
+                    'data-sitekey': '6LcxXBwTAAAAAAPBe49OXj6umVVuk_3b_hgq2fsr'
+                }),
                 mutil.formControls([
                     m('button[type=submit].pure-button.btn.primary', 'Sign Up'),
                     m('a.pure-button.btn.secondary', {

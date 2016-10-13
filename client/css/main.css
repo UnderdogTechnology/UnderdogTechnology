@@ -378,13 +378,13 @@ div.form-control > table {
 
 /* Maybe change this color to something dope af */
 
-.primary.shopper {
+.primary.story {
     /*text-shadow: -1px 0 #ff0707, 0 1px #ff0707, 1px 0 #ff0707, 0 -1px #ff0707;*/
     background: #dc3232;
     border-color: #ff0707;
 }
 
-.inverse-primary.shopper {
+.inverse-primary.story {
     background: #fff;
     color: #dc3232;
 }

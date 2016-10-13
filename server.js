@@ -1,4 +1,7 @@
 var express = require('express');
+var PouchDB = require('pouchdb');
+PouchDB.plugin(require('pouchdb-authentication'));
+
 var app = express();
 
 var ENV = process.env.NODE_ENV || 'development';
