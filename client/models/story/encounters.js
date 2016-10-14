@@ -1,4 +1,4 @@
-app.model.encounters = function(init) {
+app.model.story.encounters = function(init) {
     var curId = 0;
     
     var newEncounter = function(o) {
@@ -82,6 +82,8 @@ app.model.encounters = function(init) {
                         role: 'Player',
                         party: []
                     });
+                    
+                    story.about = player.id;
                     
                     story.characters('narrator').speak('Nice to meet you, ' + player.name + '!');
                 })

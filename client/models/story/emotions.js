@@ -1,4 +1,4 @@
-app.model.emotions = function(em){
+app.model.story.emotions = function(em){
     var _ = {
         add: function(emo, val) {
             if(!_.hasOwnProperty(emo) || isNaN(val)) return false;

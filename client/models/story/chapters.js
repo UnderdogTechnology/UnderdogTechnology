@@ -1,4 +1,4 @@
-app.model.chapters = function() {
+app.model.story.chapters = function() {
     
     var curId = 0;
     

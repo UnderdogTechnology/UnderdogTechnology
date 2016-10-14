@@ -17,10 +17,13 @@
     var cmp = app.cmp = {
         common: {},
         planit: {},
-        shopper: {}
+        shopper: {},
+        story: {}
     };
     
-    var model = app.model = {};
+    var model = app.model = {
+        story: {}
+    };
     
     app.shared = {
         user: null
@@ -42,7 +45,7 @@
             // PLAN-IT
             'plan-it/find', 'plan-it/edit',
             // STORY
-            'story/index'
+            'story/index', 'story/prompt'
         ]
     };
     
@@ -105,7 +108,7 @@
             url: '/story',
             icon: 'fa fa-bookmark fa-lg',
             class: 'primary story',
-            component: cmp.story,
+            component: cmp.story.home,
             auth: false
         }, 
         // AUTHENTICATED ROUTES

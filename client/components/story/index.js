@@ -1,10 +1,10 @@
-app.cmp.story = {
+app.cmp.story.home = {
     controller: function(args) {
         // Cached variables
         var _ = {};
             
         var ctrl = {
-            dialogue: function(id) {
+            dialogs: function(id) {
               return _.dialogs[id];  
             },
             chapters: function(id) {
@@ -16,50 +16,18 @@ app.cmp.story = {
             characters: function(id) {
                 return _.characters[id];
             },
-            input: function(e) {
-                var input = e.target.value;
+            start: function() {
+                _ = {};
                 
-                if(/^~!/.test(input)) {
-                    var command = input.replace('~!', '').trim();
-                    
-                    switch(command) {
-                        case 'restart':
-                        case 'start':
-                            start();
-                            break;
-                        case 'change name':
-                            ctrl.characters('narrator').speak('What would you like to change your name to?', function(response) {
-                                ctrl.characters('narrator').speak('Your name has been changed to ' + (ctrl.characters(_.about).name = response))
-                            });
-                            break;
-                        default:
-                            try {
-                                eval('console.log(' + command + ')');
-                                ctrl.characters('narrator').speak('Check the console for results.');
-                            } catch(e){
-                                ctrl.characters('narrator').speak('Command not found.');
-                            }
-                            break;
-                    }
-                } else if(_.dialogue && _.dialogue.cb) {
-                    _.dialogue.cb(input);
-                }
+                _.dialogs = app.model.story.dialogs();
+                _.characters = app.model.story.characters();
                 
-                e.target.value = '';
+                _.chapters = app.model.story.chapters();
+                loadChapter('intro');
+                
+                _.encounters = app.model.story.encounters();
+                loadEncounter('intro');
             }
-        };
-        
-        var start = function() {
-            _ = {};
-            
-            _.dialogs = app.model.dialogs();
-            _.characters = app.model.characters();
-            
-            _.chapters = app.model.chapters();
-            loadChapter('intro');
-            
-            _.encounters = app.model.encounters();
-            loadEncounter('intro');
         };
             
         var loadChapter = function(id) {
@@ -89,15 +57,15 @@ app.cmp.story = {
         
         var loadCharacter = function(id) {
             var speak = function(line, cb) {
-                _.dialogue = _.dialogs.add({
+                ctrl.dialogue = _.dialogs.add({
                     text: line,
                     character: this.id,
                     cb: cb || null
                 });
                 
-                ctrl.encounter.dialogue.push(_.dialogue.id);
+                ctrl.encounter.dialogue.push(ctrl.dialogue.id);
                 
-                return _.dialogue;
+                return ctrl.dialogue;
             }
             
             var perform = function(action, cb) {
@@ -117,25 +85,14 @@ app.cmp.story = {
             return character;
         };
         
-        start();
+        ctrl.start();
         return ctrl;
     },
     view: function(ctrl, args) {
-        
         return m('div.story',
-            m('div.prompt', [
-                m('input[type=text].input', {
-                    onchange: ctrl.input
-                }),
-                m('div.output', ctrl.encounter.dialogue.map(function(id){
-                    var dialogue = ctrl.dialogue(id);
-                    return m('p', [
-                        m('span', ctrl.characters(dialogue.character).name),
-                        m('span', ': '),
-                        m('span', dialogue.text)
-                    ]);
-                }))
-            ])
+            m.component(app.cmp.story.prompt, {
+                story: ctrl
+            })
         );
     }
 };

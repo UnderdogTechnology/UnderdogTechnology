@@ -1,4 +1,4 @@
-app.model.dialogs = function() {
+app.model.story.dialogs = function() {
     var curId = 0;
     
     var newLine = function(o) {

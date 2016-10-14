@@ -1,4 +1,4 @@
-app.model.characters = function(init) {
+app.model.story.characters = function(init) {
     var curId = 0;
     
     var newCharacter = function(o) {
@@ -8,7 +8,7 @@ app.model.characters = function(init) {
         
         // Set defaults
         character.state      = 'Conscious';
-        character.emotions   = app.model.emotions();
+        character.emotions   = app.model.story.emotions();
         
         // Set meta
         for(var attr in o) {
