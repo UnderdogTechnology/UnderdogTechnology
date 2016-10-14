@@ -85,7 +85,8 @@ app.model.story.encounters = function(init) {
                     
                     story.about = player.id;
                     
-                    story.characters('narrator').speak('Nice to meet you, ' + player.name + '!');
+                    story.characters('narrator').speak('Nice to meet you, ' + player.name + '! You can change your name at any time.');
+                    story.characters('narrator').speak('That\'s all I was programmed to do. Goodbye!');
                 })
             }
         }
